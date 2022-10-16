@@ -32,7 +32,9 @@ public class Client {
 			}
 		} catch (RemoteException e) {
 			e.printStackTrace();
-			}
+		} catch (NullDataException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private static void showData(ArrayList<?> dataList) {
@@ -50,6 +52,7 @@ public class Client {
 		System.out.println("\n *********************** MENU ***********************");
 		System.out.println("1. List Students");
 		System.out.println("2. List courses");
+		System.out.println("3. Add Students");
 		System.out.println("x. Exit");
 	}
 

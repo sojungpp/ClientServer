@@ -49,7 +49,7 @@ public class Data extends UnicastRemoteObject implements DataIF {
 	}
 
 	@Override
-	public ArrayList<Student> getAllStudentData() throws RemoteException {
+	public ArrayList<Student> getAllStudentData() throws RemoteException, NullDataException {
 		return studentList.getAllStudentRecords();
 	}
 

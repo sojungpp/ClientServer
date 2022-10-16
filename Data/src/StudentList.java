@@ -20,7 +20,8 @@ public class StudentList {
 		objStudentFile.close();
 	}
 
-	public ArrayList<Student> getAllStudentRecords() {
+	public ArrayList<Student> getAllStudentRecords() throws NullDataException {
+		if(this.vStudent.size() == 0) throw new NullDataException("~~~~~~~~~~ Student data is null ~~~~~~~~~~");
 		return this.vStudent;
 	}
 

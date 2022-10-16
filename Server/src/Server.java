@@ -47,7 +47,7 @@ public class Server extends UnicastRemoteObject implements ServerIF {
 	}
 
 	@Override
-	public  ArrayList<Student> getAllStudentData() throws RemoteException {
+	public  ArrayList<Student> getAllStudentData() throws RemoteException, NullDataException {
 		return data.getAllStudentData();
 	}
 
