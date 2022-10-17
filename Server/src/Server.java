@@ -24,10 +24,8 @@ public class Server extends UnicastRemoteObject implements ServerIF {
 			
 			data = (DataIF) Naming.lookup("Data");
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace(); //에러코드 print
+			e.printStackTrace();
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 			
@@ -54,6 +52,18 @@ public class Server extends UnicastRemoteObject implements ServerIF {
 	@Override
 	public ArrayList<Course> getAllCourseData() throws RemoteException {
 		return data.getAllCourseData();
+	}
+
+	@Override
+	public boolean addStudent(String studentInfo) throws RemoteException {
+		if(data.addStudent(studentInfo)) return true;
+		else return false;
+	}
+
+	@Override
+	public boolean deleteStudent(String studentId) throws RemoteException {
+		if(data.deleteStudent(studentId)) return true;
+		else return false;
 	}
 	
 }

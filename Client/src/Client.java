@@ -22,8 +22,24 @@ public class Client {
 					showData(server.getAllStudentData());
 					break;
 				case "2" :
+					deleteStudent(server, inputReader);
+					break;
+				case "3" :
+					addStudent(server, inputReader);
+					break;
+				case "4" :
 					showData(server.getAllCourseData());
 					break;
+				case "5" :
+					
+					break;
+				case "6" :
+					
+					break;
+				case "7" :
+					//studentId와 courseId 저장해놓는 수강신청 만들기
+					//학생정보유무, 과목유무체크, 선수과목체크 등등(서버에서), exception으로 처리할지 return value로 처리할지
+					break;	
 				case "x":
 					return;
 				default:
@@ -35,6 +51,23 @@ public class Client {
 		} catch (NullDataException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private static void addStudent(ServerIF server, BufferedReader inputReader) throws IOException, RemoteException {
+		System.out.println("-----Student Information-----");
+		System.out.println("Student Id: "); String studentId = inputReader.readLine().trim();
+		System.out.println("Student Name: "); String studentName = inputReader.readLine().trim();
+		System.out.println("Student Department: "); String studentDepartment = inputReader.readLine().trim();
+		System.out.println("Student Completed Course List: "); String completedCourses = inputReader.readLine().trim();
+		
+		if(server.addStudent(studentId + " " + studentName + " " + studentDepartment + " " + completedCourses)) System.out.println("SUCCESS");
+		else System.out.println("FAIL");
+	}
+
+	private static void deleteStudent(ServerIF server, BufferedReader inputReader) throws RemoteException, IOException {
+		System.out.print("Student Id: ");
+		if(server.deleteStudent(inputReader.readLine().trim())) System.out.println("SUCCESS");
+		else System.out.println("FAIL");
 	}
 
 	private static void showData(ArrayList<?> dataList) {
@@ -51,8 +84,12 @@ public class Client {
 	private static void showMenu() {
 		System.out.println("\n *********************** MENU ***********************");
 		System.out.println("1. List Students");
-		System.out.println("2. List courses");
-		System.out.println("3. Add Students");
+		System.out.println("2. Add Student");
+		System.out.println("3. Delete Student");
+		System.out.println("4. List Courses");
+		System.out.println("5. Add Course");
+		System.out.println("6. Delete Course");
+		System.out.println("7. Reservation");
 		System.out.println("x. Exit");
 	}
 
