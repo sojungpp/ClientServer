@@ -22,19 +22,19 @@ public class Client {
 					showData(server.getAllStudentData());
 					break;
 				case "2" :
-					deleteStudent(server, inputReader);
+					addStudent(server, inputReader);
 					break;
 				case "3" :
-					addStudent(server, inputReader);
+					deleteStudent(server, inputReader);
 					break;
 				case "4" :
 					showData(server.getAllCourseData());
 					break;
 				case "5" :
-					
+					addCourse(server, inputReader);
 					break;
 				case "6" :
-					
+					deleteCourse(server, inputReader);
 					break;
 				case "7" :
 					//studentId와 courseId 저장해놓는 수강신청 만들기
@@ -63,10 +63,27 @@ public class Client {
 		if(server.addStudent(studentId + " " + studentName + " " + studentDepartment + " " + completedCourses)) System.out.println("SUCCESS");
 		else System.out.println("FAIL");
 	}
+	
+	private static void addCourse(ServerIF server, BufferedReader inputReader) throws IOException, RemoteException {
+		System.out.println("-----Course Information-----");
+		System.out.println("Course Id: "); String courseId = inputReader.readLine().trim();
+		System.out.println("Professor Name: "); String professorName = inputReader.readLine().trim();
+		System.out.println("Course Name: "); String courseName = inputReader.readLine().trim();
+		System.out.println("Prerequisite Id: "); String prerequisiteId = inputReader.readLine().trim();
+		
+		if(server.addCourse(courseId + " " + professorName + " " + courseName + " " + prerequisiteId)) System.out.println("SUCCESS");
+		else System.out.println("FAIL");
+	}
 
 	private static void deleteStudent(ServerIF server, BufferedReader inputReader) throws RemoteException, IOException {
 		System.out.print("Student Id: ");
 		if(server.deleteStudent(inputReader.readLine().trim())) System.out.println("SUCCESS");
+		else System.out.println("FAIL");
+	}
+
+	private static void deleteCourse(ServerIF server, BufferedReader inputReader) throws RemoteException, IOException {
+		System.out.print("Course Id: ");
+		if(server.deleteCourse(inputReader.readLine().trim())) System.out.println("SUCCESS");
 		else System.out.println("FAIL");
 	}
 
