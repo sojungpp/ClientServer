@@ -11,4 +11,6 @@ public interface ServerIF extends Remote{
 	String find() throws RemoteException;
 	boolean deleteCourse(String courseId) throws RemoteException;
 	boolean addCourse(String courseInfo) throws RemoteException;
+	boolean findStudent(String studentId) throws RemoteException;
+	ArrayList<String> registerCourse(String studentId, String courseId) throws RemoteException;
 }

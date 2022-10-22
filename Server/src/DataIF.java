@@ -11,4 +11,9 @@ public interface DataIF extends Remote{
 	String find() throws RemoteException;
 	boolean deleteCourse(String courseId) throws RemoteException;
 	boolean addCourse(String courseInfo) throws RemoteException;
+	boolean findStudent(String studentId) throws RemoteException;
+	boolean findCourse(String courseId) throws RemoteException;
+	ArrayList<String> findCompletedCourse(String studentId) throws RemoteException;
+	ArrayList<String> findAdvancedCourse(String courseId) throws RemoteException;
+	void registerCourse(String registrationInfo) throws RemoteException;
 }

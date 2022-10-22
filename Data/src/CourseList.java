@@ -48,4 +48,21 @@ public class CourseList {
 		if(this.vCourse.add(new Course(courseInfo))) return true;
 		else return false;
 	}
+
+	public boolean findCourse(String courseId) {
+		for (int i = 0; i < this.vCourse.size(); i++) {
+			Course course = (Course) this.vCourse.get(i);
+			if (course.match(courseId)) return true;
+		} return false;
+	}
+
+	public ArrayList<String> findAdvancedCourse(String courseId) {
+		for (int i = 0; i < this.vCourse.size(); i++) {
+			Course course = (Course) this.vCourse.get(i);
+			if (course.match(courseId)) {
+				return course.getAdvancedCourses();
+			} 
+		}
+		return null;
+	}
 }

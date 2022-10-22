@@ -11,6 +11,7 @@ public class Data extends UnicastRemoteObject implements DataIF {
 	private static final long serialVersionUID = 1L;
 	protected static StudentList studentList;
 	protected static CourseList courseList;
+	protected static RegisterList registrationList;
 	String name;
 	
 	protected Data() throws RemoteException {
@@ -20,16 +21,17 @@ public class Data extends UnicastRemoteObject implements DataIF {
 	public static void main(String[] arg) throws FileNotFoundException, IOException {
 
 		try {
-			Data data = new Data(); //°´Ã¼ »ý¼º
-			Naming.rebind("Data", data); //data°´Ã¼¸¦ Data ÀÌ¸§À¸·Î µî·Ï
+			Data data = new Data(); 
+			Naming.rebind("Data", data); 
 			System.out.println("Data is ready !!!");
 			
-			studentList = new StudentList("C:\\Users\\¹Ú¼ÒÁ¤\\eclipse-workspace\\Data\\src\\Students.txt");
-			courseList = new CourseList("C:\\Users\\¹Ú¼ÒÁ¤\\eclipse-workspace\\Data\\src\\Courses.txt");
+			studentList = new StudentList("C:\\Users\\ë°•ì†Œì •\\eclipse-workspace\\Data\\src\\Students.txt");
+			courseList = new CourseList("C:\\Users\\ë°•ì†Œì •\\eclipse-workspace\\Data\\src\\Courses.txt");
+			registrationList = new RegisterList("C:\\Users\\ë°•ì†Œì •\\eclipse-workspace\\Data\\src\\Registrations.txt");
 			
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace(); //¿¡·¯ÄÚµå print
+			e.printStackTrace(); 
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -37,7 +39,7 @@ public class Data extends UnicastRemoteObject implements DataIF {
 	}
 	
 	@Override
-	public void save (String name) throws RemoteException { //¿¡·¯¸¦ ´øÁ®ÁÖ´Â °Í(throws)
+	public void save (String name) throws RemoteException { 
 		System.out.println("Server's response !!!");
 		this.name = name;
 	}
@@ -81,5 +83,33 @@ public class Data extends UnicastRemoteObject implements DataIF {
 		if(courseList.addCourseRecords(courseInfo)) return true;
 		else return false;
 	}
+
+	@Override
+	public boolean findStudent(String studentId) throws RemoteException {
+		if(studentList.findStudent(studentId)) return true;
+		return false;
+	}
+
+	@Override
+	public boolean findCourse(String courseId) throws RemoteException {
+		if(courseList.findCourse(courseId)) return true;
+		return false;
+	}
+
+	@Override
+	public ArrayList<String> findCompletedCourse(String studentId) throws RemoteException {
+		return studentList.findCompletedCourse(studentId);
+	}
+
+	@Override
+	public ArrayList<String> findAdvancedCourse(String courseId) throws RemoteException {
+		return courseList.findAdvancedCourse(courseId);
+	}
+
+	@Override
+	public void registerCourse(String registrationInfo) {
+		registrationList.addRegistrationRecords(registrationInfo);
+	}
+
 	
 }

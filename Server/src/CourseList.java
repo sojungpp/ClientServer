@@ -20,17 +20,49 @@ public class CourseList {
 		objCourseFile.close();
 	}
 
-	public ArrayList<Course> getAllStudentRecords() {
+	public ArrayList<Course> getAllCourseRecords() {
 		return this.vCourse;
 	}
 
-	public boolean isRegisteredStudent(String sSID) {
+	public boolean isRegisteredCourse(String sSID) {
 		for (int i = 0; i < this.vCourse.size(); i++) {
-			Course objStudent = (Course) this.vCourse.get(i);
-			if (objStudent.match(sSID)) {
+			Course objCourse = (Course) this.vCourse.get(i);
+			if (objCourse.match(sSID)) {
 				return true;
 			}
 		}
 		return false;
+	}
+
+	public boolean deleteCourseRecords(String courseId) {
+		for (int i = 0; i < this.vCourse.size(); i++) {
+			Course course = (Course) this.vCourse.get(i);
+			if (course.match(courseId)) {
+				if(this.vCourse.remove(course)) return true;
+				else return false;
+			}
+		} return false;
+	}
+
+	public boolean addCourseRecords(String courseInfo) {
+		if(this.vCourse.add(new Course(courseInfo))) return true;
+		else return false;
+	}
+
+	public boolean findCourse(String courseId) {
+		for (int i = 0; i < this.vCourse.size(); i++) {
+			Course course = (Course) this.vCourse.get(i);
+			if (course.match(courseId)) return true;
+		} return false;
+	}
+
+	public ArrayList<String> findAdvancedCourse(String courseId) {
+		for (int i = 0; i < this.vCourse.size(); i++) {
+			Course course = (Course) this.vCourse.get(i);
+			if (course.match(courseId)) {
+				return course.getAdvancedCourses();
+			} 
+		}
+		return null;
 	}
 }

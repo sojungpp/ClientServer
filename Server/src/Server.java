@@ -18,8 +18,8 @@ public class Server extends UnicastRemoteObject implements ServerIF {
 	public static void main(String[] arg) throws NotBoundException {
 
 		try {
-			Server server = new Server(); //°´Ã¼ »ı¼º
-			Naming.rebind("Server", server); //server°´Ã¼¸¦ AddServer ÀÌ¸§À¸·Î µî·Ï
+			Server server = new Server(); 
+			Naming.rebind("Server", server); 
 			System.out.println("RMI Server is ready !!!");
 			
 			data = (DataIF) Naming.lookup("Data");
@@ -27,13 +27,11 @@ public class Server extends UnicastRemoteObject implements ServerIF {
 			e.printStackTrace();
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
-		} 
-			
+		}
 	}
 
-
 	@Override
-	public void save (String name) throws RemoteException { //¿¡·¯¸¦ ´øÁ®ÁÖ´Â °Í
+	public void save (String name) throws RemoteException { 
 		System.out.println("Server's response !!!");
 		this.name = name;
 	}
@@ -76,6 +74,26 @@ public class Server extends UnicastRemoteObject implements ServerIF {
 	public boolean addCourse(String courseInfo) throws RemoteException {
 		if(data.addCourse(courseInfo)) return true;
 		else return false;
+	}
+
+	@Override
+	public boolean findStudent(String studentId) throws RemoteException {
+		if(data.findStudent(studentId)) return true;
+		return false;
+	}
+
+	@Override
+	public ArrayList<String> registerCourse(String studentId, String courseId) throws RemoteException {
+		if(!data.findStudent(studentId)) System.out.println("ì¡´ì¬í•˜ì§€ ì•ŠëŠ” í•™ë²ˆì…ë‹ˆë‹¤."); //í•™ìƒìœ ë¬´ì²´í¬
+		if(!data.findCourse(courseId)) System.out.println("ì¡´ì¬í•˜ì§€ ì•ŠëŠ” ê³¼ëª©ì…ë‹ˆë‹¤."); //ê³¼ëª©ìœ ë¬´ì²´í¬
+		ArrayList<String> completedCourse = data.findCompletedCourse(studentId);
+		ArrayList<String> advancedCourse = data.findAdvancedCourse(courseId);
+		for(int i=0; i<advancedCourse.size(); i++) {
+			if(!completedCourse.contains(advancedCourse.get(i))) System.out.println("ì„ ì´ìˆ˜ ê³¼ëª©ì„ ìˆ˜ê°•í•˜ì„¸ìš”."); //ì„ ì´ìˆ˜ê³¼ëª©ì²´í¬
+		}
+		data.registerCourse(studentId + " " + courseId);
+		return completedCourse;
+
 	}
 	
 }

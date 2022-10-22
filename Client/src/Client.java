@@ -37,8 +37,9 @@ public class Client {
 					deleteCourse(server, inputReader);
 					break;
 				case "7" :
-					//studentId¿Í courseId ÀúÀåÇØ³õ´Â ¼ö°­½ÅÃ» ¸¸µé±â
-					//ÇĞ»ıÁ¤º¸À¯¹«, °ú¸ñÀ¯¹«Ã¼Å©, ¼±¼ö°ú¸ñÃ¼Å© µîµî(¼­¹ö¿¡¼­), exceptionÀ¸·Î Ã³¸®ÇÒÁö return value·Î Ã³¸®ÇÒÁö
+					registerCourse(server, inputReader);
+					//studentIdì™€ courseId ì €ì¥í•´ë†“ëŠ” ìˆ˜ê°•ì‹ ì²­ ë§Œë“¤ê¸°
+					//í•™ìƒì •ë³´ìœ ë¬´, ê³¼ëª©ìœ ë¬´ì²´í¬, ì„ ìˆ˜ê³¼ëª©ì²´í¬ ë“±ë“±(ì„œë²„ì—ì„œ), exceptionìœ¼ë¡œ ì²˜ë¦¬í• ì§€ return valueë¡œ ì²˜ë¦¬í• ì§€
 					break;	
 				case "x":
 					return;
@@ -51,6 +52,26 @@ public class Client {
 		} catch (NullDataException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private static void showMenu() {
+		System.out.println("\n *********************** MENU ***********************");
+		System.out.println("1. List Students");
+		System.out.println("2. Add Student");
+		System.out.println("3. Delete Student");
+		System.out.println("4. List Courses");
+		System.out.println("5. Add Course");
+		System.out.println("6. Delete Course");
+		System.out.println("7. registerCourse");
+		System.out.println("x. Exit");
+	}
+
+	private static void registerCourse(ServerIF server, BufferedReader inputReader) throws IOException {
+		System.out.println("Student Id: "); String studentId = inputReader.readLine().trim();
+		showData(server.getAllCourseData());
+		System.out.println("Course Id: "); String courseId = inputReader.readLine().trim();
+		ArrayList<String> result = server.registerCourse(studentId, courseId);
+		System.out.println("result: " + result);
 	}
 
 	private static void addStudent(ServerIF server, BufferedReader inputReader) throws IOException, RemoteException {
@@ -69,9 +90,9 @@ public class Client {
 		System.out.println("Course Id: "); String courseId = inputReader.readLine().trim();
 		System.out.println("Professor Name: "); String professorName = inputReader.readLine().trim();
 		System.out.println("Course Name: "); String courseName = inputReader.readLine().trim();
-		System.out.println("Prerequisite Id: "); String prerequisiteId = inputReader.readLine().trim();
+		System.out.println("Advanced Course List: "); String advancedCourses = inputReader.readLine().trim();
 		
-		if(server.addCourse(courseId + " " + professorName + " " + courseName + " " + prerequisiteId)) System.out.println("SUCCESS");
+		if(server.addCourse(courseId + " " + professorName + " " + courseName + " " + advancedCourses)) System.out.println("SUCCESS");
 		else System.out.println("FAIL");
 	}
 
@@ -98,16 +119,6 @@ public class Client {
 		System.out.println("It does not exist ! Please try again !");
 	}
 
-	private static void showMenu() {
-		System.out.println("\n *********************** MENU ***********************");
-		System.out.println("1. List Students");
-		System.out.println("2. Add Student");
-		System.out.println("3. Delete Student");
-		System.out.println("4. List Courses");
-		System.out.println("5. Add Course");
-		System.out.println("6. Delete Course");
-		System.out.println("7. Reservation");
-		System.out.println("x. Exit");
-	}
+
 
 }

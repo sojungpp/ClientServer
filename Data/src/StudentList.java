@@ -50,4 +50,21 @@ public class StudentList {
 		}
 		return false;
 	}
+
+	public boolean findStudent(String studentId) {
+		for (int i = 0; i < this.vStudent.size(); i++) {
+			Student student = (Student) this.vStudent.get(i);
+			if (student.match(studentId)) return true;
+		} return false;
+	}
+
+	public ArrayList<String> findCompletedCourse(String studentId) {
+		for (int i = 0; i < this.vStudent.size(); i++) {
+			Student student = (Student) this.vStudent.get(i);
+			if (student.match(studentId)) {
+				return student.getCompletedCourse();
+			}
+		}
+		return null;
+	}
 }
