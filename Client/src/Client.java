@@ -13,7 +13,7 @@ public class Client {
 		ServerIF server;
 		BufferedReader inputReader = new BufferedReader(new InputStreamReader(System.in));
 		try {
-				server = (ServerIF)Naming.lookup("Server");
+			server = (ServerIF)Naming.lookup("Server");
 			while(true) {
 				showMenu();
 				String userConsoleInput = inputReader.readLine().trim();
@@ -66,7 +66,7 @@ public class Client {
 		System.out.println("x. Exit");
 	}
 
-	private static void registerCourse(ServerIF server, BufferedReader inputReader) throws IOException {
+	private static void registerCourse(ServerIF server, BufferedReader inputReader) throws IOException, RemoteException {
 		System.out.println("Student Id: "); String studentId = inputReader.readLine().trim();
 		showData(server.getAllCourseData());
 		System.out.println("Course Id: "); String courseId = inputReader.readLine().trim();

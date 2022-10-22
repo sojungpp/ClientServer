@@ -9,6 +9,7 @@ public class Server extends UnicastRemoteObject implements ServerIF {
 	
 	private static final long serialVersionUID = 1L;
 	private static DataIF data;
+	private static BaseException baseException;
 	String name;
 	
 	protected Server() throws RemoteException {
@@ -84,7 +85,7 @@ public class Server extends UnicastRemoteObject implements ServerIF {
 
 	@Override
 	public ArrayList<String> registerCourse(String studentId, String courseId) throws RemoteException {
-		if(!data.findStudent(studentId)) System.out.println("존재하지 않는 학번입니다."); //학생유무체크
+		if(!data.findStudent(studentId)) new InvalidStudentIdException(); //학생유무체크
 		if(!data.findCourse(courseId)) System.out.println("존재하지 않는 과목입니다."); //과목유무체크
 		ArrayList<String> completedCourse = data.findCompletedCourse(studentId);
 		ArrayList<String> advancedCourse = data.findAdvancedCourse(courseId);
