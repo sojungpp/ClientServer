@@ -5,6 +5,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import exception.NullDataException;
+
 public class RegisterList {
 	protected ArrayList<Registration> vRegistration;
 	
@@ -21,7 +23,7 @@ public class RegisterList {
 	}
 
 	public ArrayList<Registration> getAllRegistrationRecords() throws NullDataException {
-		if(this.vRegistration.size() == 0) throw new NullDataException("~~~~~~~~~~ Registration data is null ~~~~~~~~~~");
+		if(this.vRegistration.size() == 0) return null;
 		return this.vRegistration;
 	}
 

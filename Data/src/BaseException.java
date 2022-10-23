@@ -1,4 +1,5 @@
 
+
 public class BaseException extends Exception {
 	
 	final int codeNumber;
@@ -7,6 +8,7 @@ public class BaseException extends Exception {
 	public BaseException(int codeNumber, String message) {
 		this.codeNumber = codeNumber;
 		this.message = message;
+		System.out.println("ÄÚµå : " + codeNumber + " | " + message);
 	}
 
 

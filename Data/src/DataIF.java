@@ -2,6 +2,8 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
+import exception.NullDataException;
+
 public interface DataIF extends Remote{
 	ArrayList<Student> getAllStudentData() throws RemoteException, NullDataException;
 	ArrayList<Course> getAllCourseData() throws RemoteException;

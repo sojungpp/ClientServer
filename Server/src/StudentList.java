@@ -5,6 +5,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import exception.NullDataException;
+
 public class StudentList {
 	protected ArrayList<Student> vStudent;
 	

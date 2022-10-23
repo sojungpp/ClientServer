@@ -5,6 +5,10 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
+import exception.BaseException;
+import exception.InvalidStudentIdException;
+import exception.NullDataException;
+
 public class Server extends UnicastRemoteObject implements ServerIF {
 	
 	private static final long serialVersionUID = 1L;
@@ -89,8 +93,10 @@ public class Server extends UnicastRemoteObject implements ServerIF {
 		if(!data.findCourse(courseId)) System.out.println("존재하지 않는 과목입니다."); //과목유무체크
 		ArrayList<String> completedCourse = data.findCompletedCourse(studentId);
 		ArrayList<String> advancedCourse = data.findAdvancedCourse(courseId);
-		for(int i=0; i<advancedCourse.size(); i++) {
-			if(!completedCourse.contains(advancedCourse.get(i))) System.out.println("선이수 과목을 수강하세요."); //선이수과목체크
+		if(!advancedCourse.isEmpty()) {
+			for(int i=0; i<advancedCourse.size(); i++) {
+				if(!completedCourse.contains(advancedCourse.get(i))) System.out.println("선이수 과목을 수강하세요."); //선이수과목체크
+			}
 		}
 		data.registerCourse(studentId + " " + courseId);
 		return completedCourse;

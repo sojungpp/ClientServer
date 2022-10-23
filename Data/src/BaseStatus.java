@@ -1,4 +1,5 @@
 
+
 public enum BaseStatus {
 	
 	// ¼º°ø

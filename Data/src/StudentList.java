@@ -5,6 +5,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import exception.NullDataException;
+
 public class StudentList {
 	protected ArrayList<Student> vStudent;
 	
@@ -21,7 +23,7 @@ public class StudentList {
 	}
 
 	public ArrayList<Student> getAllStudentRecords() throws NullDataException {
-		if(this.vStudent.size() == 0) throw new NullDataException("~~~~~~~~~~ Student data is null ~~~~~~~~~~");
+		if(this.vStudent.size() == 0) throw null;
 		return this.vStudent;
 	}
 	

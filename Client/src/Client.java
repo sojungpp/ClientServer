@@ -38,8 +38,6 @@ public class Client {
 					break;
 				case "7" :
 					registerCourse(server, inputReader);
-					//studentId와 courseId 저장해놓는 수강신청 만들기
-					//학생정보유무, 과목유무체크, 선수과목체크 등등(서버에서), exception으로 처리할지 return value로 처리할지
 					break;	
 				case "x":
 					return;
@@ -71,7 +69,6 @@ public class Client {
 		showData(server.getAllCourseData());
 		System.out.println("Course Id: "); String courseId = inputReader.readLine().trim();
 		ArrayList<String> result = server.registerCourse(studentId, courseId);
-		System.out.println("result: " + result);
 	}
 
 	private static void addStudent(ServerIF server, BufferedReader inputReader) throws IOException, RemoteException {

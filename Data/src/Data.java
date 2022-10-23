@@ -6,6 +6,8 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
+import exception.NullDataException;
+
 public class Data extends UnicastRemoteObject implements DataIF {
 
 	private static final long serialVersionUID = 1L;

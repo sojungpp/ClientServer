@@ -1,4 +1,5 @@
 
+
 public class BaseException extends Exception {
 	
 	final int codeNumber;
