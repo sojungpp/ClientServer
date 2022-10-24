@@ -6,7 +6,6 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
-import exception.NullDataException;
 
 public class Data extends UnicastRemoteObject implements DataIF {
 
@@ -109,8 +108,13 @@ public class Data extends UnicastRemoteObject implements DataIF {
 	}
 
 	@Override
-	public void registerCourse(String registrationInfo) {
-		registrationList.addRegistrationRecords(registrationInfo);
+	public void registerCourse(String studentId, String courseId) throws RemoteException {
+		registrationList.addRegistrationRecords(studentId, courseId);
+	}
+
+	@Override
+	public ArrayList<String> findRegisterCourse(String studentId) {
+		return registrationList.findregisterCourse(studentId);
 	}
 
 	

@@ -5,9 +5,6 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
-import exception.BaseException;
-import exception.InvalidStudentIdException;
-import exception.NullDataException;
 
 public class Server extends UnicastRemoteObject implements ServerIF {
 	
@@ -88,18 +85,17 @@ public class Server extends UnicastRemoteObject implements ServerIF {
 	}
 
 	@Override
-	public ArrayList<String> registerCourse(String studentId, String courseId) throws RemoteException {
-		if(!data.findStudent(studentId)) new InvalidStudentIdException(); //학생유무체크
-		if(!data.findCourse(courseId)) System.out.println("존재하지 않는 과목입니다."); //과목유무체크
-		ArrayList<String> completedCourse = data.findCompletedCourse(studentId);
-		ArrayList<String> advancedCourse = data.findAdvancedCourse(courseId);
-		if(!advancedCourse.isEmpty()) {
-			for(int i=0; i<advancedCourse.size(); i++) {
-				if(!completedCourse.contains(advancedCourse.get(i))) System.out.println("선이수 과목을 수강하세요."); //선이수과목체크
-			}
-		}
-		data.registerCourse(studentId + " " + courseId);
-		return completedCourse;
+	public BaseStatus registerCourse(String studentId, String courseId) throws RemoteException {
+		if(!data.findStudent(studentId)) return BaseStatus.INVALID_STUDENTID;
+		if(!data.findCourse(courseId)) return BaseStatus.INVALID_COURSEID;
+		ArrayList<String> registerCourse = data.findRegisterCourse(studentId); //수강신청과목
+		ArrayList<String> completedCourse = data.findCompletedCourse(studentId); //수강과목
+		ArrayList<String> advancedCourse = data.findAdvancedCourse(courseId); //선이수과목
+		if(!completedCourse.isEmpty() && completedCourse.contains(courseId)) return BaseStatus.ALREADY_COMPLETEDCOURSE;
+		if(!advancedCourse.isEmpty() && advancedCourse.contains(courseId) && completedCourse.isEmpty()) return BaseStatus.DO_NOT_TAKE_ADVANCEDCOURSE; 
+		if(!registerCourse.isEmpty() && !advancedCourse.isEmpty()) return BaseStatus.ALREADY_REGISTRATION; 
+		data.registerCourse(studentId, courseId);
+		return BaseStatus.SUCCESS;
 
 	}
 	

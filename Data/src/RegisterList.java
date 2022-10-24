@@ -5,8 +5,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import exception.NullDataException;
-
 public class RegisterList {
 	protected ArrayList<Registration> vRegistration;
 	
@@ -26,10 +24,30 @@ public class RegisterList {
 		if(this.vRegistration.size() == 0) throw null;
 		return this.vRegistration;
 	}
-
-	public void addRegistrationRecords(String registrationInfo) {
-		this.vRegistration.add(new Registration(registrationInfo));
-		System.out.println("수강신청되었습니다.");
+	
+	public void addRegistrationRecords(String studentId, String courseId) {
+		Registration registration = isRegisteredInfo(studentId);
+		if(registration!=null) registration.setRegisterCoursesList(courseId);
+		this.vRegistration.add(new Registration(studentId + " " + courseId));
 	}
 	
+	public Registration isRegisteredInfo(String sSID) {
+		for (int i = 0; i < this.vRegistration.size(); i++) {
+			Registration registration = (Registration) this.vRegistration.get(i);
+			if (registration.match(sSID)) {
+				return registration;
+			}
+		}
+		return null;
+	}
+	
+	public ArrayList<String> findregisterCourse(String studentId) {
+		for (int i = 0; i < this.vRegistration.size(); i++) {
+			Registration registration = (Registration) this.vRegistration.get(i);
+			if (registration.match(studentId)) {
+				return registration.getRegisterCourse();
+			}
+		}
+		return null;
+	}
 }

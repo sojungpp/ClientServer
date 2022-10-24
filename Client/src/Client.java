@@ -42,7 +42,7 @@ public class Client {
 				case "x":
 					return;
 				default:
-					showEtcError();
+					new BaseException(BaseStatus.NO_EXIST_MENU);
 				}
 			}
 		} catch (RemoteException e) {
@@ -63,14 +63,14 @@ public class Client {
 		System.out.println("7. registerCourse");
 		System.out.println("x. Exit");
 	}
-
-	private static void registerCourse(ServerIF server, BufferedReader inputReader) throws IOException, RemoteException {
-		System.out.println("Student Id: "); String studentId = inputReader.readLine().trim();
-		showData(server.getAllCourseData());
-		System.out.println("Course Id: "); String courseId = inputReader.readLine().trim();
-		ArrayList<String> result = server.registerCourse(studentId, courseId);
+	
+	private static void showData(ArrayList<?> dataList) {
+		String list = "";
+		for(int i=0; i<dataList.size(); i++) {
+			list += dataList.get(i) + "\n";
+		} System.out.println(list);;
 	}
-
+	
 	private static void addStudent(ServerIF server, BufferedReader inputReader) throws IOException, RemoteException {
 		System.out.println("-----Student Information-----");
 		System.out.println("Student Id: "); String studentId = inputReader.readLine().trim();
@@ -79,6 +79,12 @@ public class Client {
 		System.out.println("Student Completed Course List: "); String completedCourses = inputReader.readLine().trim();
 		
 		if(server.addStudent(studentId + " " + studentName + " " + studentDepartment + " " + completedCourses)) System.out.println("SUCCESS");
+		else System.out.println("FAIL");
+	}
+	
+	private static void deleteStudent(ServerIF server, BufferedReader inputReader) throws RemoteException, IOException {
+		System.out.print("Student Id: ");
+		if(server.deleteStudent(inputReader.readLine().trim())) System.out.println("SUCCESS");
 		else System.out.println("FAIL");
 	}
 	
@@ -93,29 +99,19 @@ public class Client {
 		else System.out.println("FAIL");
 	}
 
-	private static void deleteStudent(ServerIF server, BufferedReader inputReader) throws RemoteException, IOException {
-		System.out.print("Student Id: ");
-		if(server.deleteStudent(inputReader.readLine().trim())) System.out.println("SUCCESS");
-		else System.out.println("FAIL");
-	}
-
 	private static void deleteCourse(ServerIF server, BufferedReader inputReader) throws RemoteException, IOException {
 		System.out.print("Course Id: ");
 		if(server.deleteCourse(inputReader.readLine().trim())) System.out.println("SUCCESS");
 		else System.out.println("FAIL");
 	}
-
-	private static void showData(ArrayList<?> dataList) {
-		String list = "";
-		for(int i=0; i<dataList.size(); i++) {
-			list += dataList.get(i) + "\n";
-		} System.out.println(list);;
+	
+	private static void registerCourse(ServerIF server, BufferedReader inputReader) throws IOException, RemoteException {
+		System.out.println("Student Id: "); String studentId = inputReader.readLine().trim();
+		showData(server.getAllCourseData());
+		System.out.println("Course Id: "); String courseId = inputReader.readLine().trim();
+		BaseStatus baseStatus = server.registerCourse(studentId, courseId);
+		new BaseException(baseStatus);
 	}
 
-	private static void showEtcError() {
-		System.out.println("It does not exist ! Please try again !");
-	}
-
-
-
+	
 }

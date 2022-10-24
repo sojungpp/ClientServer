@@ -28,4 +28,15 @@ public class Registration implements Serializable{
         return "\n" + stringReturn;
     }
 
+    public ArrayList<String> getRegisterCourse() {
+        return this.registerCoursesList;
+    }
+	public ArrayList<String> getRegisterCoursesList() {
+		return registerCoursesList;
+	}
+	public void setRegisterCoursesList(String id) {
+		this.registerCoursesList.add(id);
+	}
+    
+    
 }

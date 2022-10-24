@@ -2,8 +2,6 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-import exception.NullDataException;
-
 public interface DataIF extends Remote{
 	ArrayList<Student> getAllStudentData() throws RemoteException, NullDataException;
 	ArrayList<Course> getAllCourseData() throws RemoteException;
@@ -17,5 +15,6 @@ public interface DataIF extends Remote{
 	boolean findCourse(String courseId) throws RemoteException;
 	ArrayList<String> findCompletedCourse(String studentId) throws RemoteException;
 	ArrayList<String> findAdvancedCourse(String courseId) throws RemoteException;
-	void registerCourse(String registrationInfo) throws RemoteException;
+	void registerCourse(String studentId, String courseID) throws RemoteException;
+	ArrayList<String> findRegisterCourse(String studentId) throws RemoteException;
 }

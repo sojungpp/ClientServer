@@ -2,7 +2,6 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-import exception.NullDataException;
 
 public interface ServerIF extends Remote{
 	ArrayList<Student> getAllStudentData() throws RemoteException, NullDataException;
@@ -14,5 +13,5 @@ public interface ServerIF extends Remote{
 	boolean deleteCourse(String courseId) throws RemoteException;
 	boolean addCourse(String courseInfo) throws RemoteException;
 	boolean findStudent(String studentId) throws RemoteException;
-	ArrayList<String> registerCourse(String studentId, String courseId) throws RemoteException;
+	BaseStatus registerCourse(String studentId, String courseId) throws RemoteException;
 }
