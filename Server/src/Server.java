@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -55,15 +56,13 @@ public class Server extends UnicastRemoteObject implements ServerIF {
 	}
 
 	@Override
-	public boolean addStudent(String studentInfo) throws RemoteException {
-		if(data.addStudent(studentInfo)) return true;
-		else return false;
+	public BaseStatus addStudent(String studentInfo) throws IOException {
+		return data.addStudent(studentInfo);
 	}
 
 	@Override
-	public boolean deleteStudent(String studentId) throws RemoteException {
-		if(data.deleteStudent(studentId)) return true;
-		else return false;
+	public BaseStatus deleteStudent(String studentId) throws IOException {
+		return data.deleteStudent(studentId);
 	}
 
 	@Override
@@ -88,15 +87,21 @@ public class Server extends UnicastRemoteObject implements ServerIF {
 	public BaseStatus registerCourse(String studentId, String courseId) throws RemoteException {
 		if(!data.findStudent(studentId)) return BaseStatus.INVALID_STUDENTID;
 		if(!data.findCourse(courseId)) return BaseStatus.INVALID_COURSEID;
-		ArrayList<String> registerCourse = data.findRegisterCourse(studentId); //수강신청과목
-		ArrayList<String> completedCourse = data.findCompletedCourse(studentId); //수강과목
-		ArrayList<String> advancedCourse = data.findAdvancedCourse(courseId); //선이수과목
+		ArrayList<String> registerCourse = data.findRegisterCourse(studentId);
+		ArrayList<String> completedCourse = data.findCompletedCourse(studentId);
+		ArrayList<String> advancedCourse = data.findAdvancedCourse(courseId);
 		if(!completedCourse.isEmpty() && completedCourse.contains(courseId)) return BaseStatus.ALREADY_COMPLETEDCOURSE;
 		if(!advancedCourse.isEmpty() && advancedCourse.contains(courseId) && completedCourse.isEmpty()) return BaseStatus.DO_NOT_TAKE_ADVANCEDCOURSE; 
 		if(!registerCourse.isEmpty() && !advancedCourse.isEmpty()) return BaseStatus.ALREADY_REGISTRATION; 
 		data.registerCourse(studentId, courseId);
 		return BaseStatus.SUCCESS;
+	}
 
+	@Override
+	public boolean login(String studentId, String studentPassword) throws RemoteException {
+		String password = data.findStudentPassword(studentId);
+		if(password.equals(studentPassword)) return true;
+		return false;
 	}
 	
 }

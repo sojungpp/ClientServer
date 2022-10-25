@@ -1,45 +1,60 @@
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-
 public class StudentList {
 	protected ArrayList<Student> vStudent;
+	protected String sStudentFileName;
+	
 	
 	public StudentList(String sStudentFileName) throws FileNotFoundException, IOException {
+		this.sStudentFileName = sStudentFileName;
 		BufferedReader objStudentFile = new BufferedReader(new FileReader(sStudentFileName));
 		this.vStudent = new ArrayList<Student>();
 		while (objStudentFile.ready()) {
 			String stuInfo = objStudentFile.readLine();
 			if (!stuInfo.equals("")) {
 				this.vStudent.add(new Student(stuInfo));
+				
 			}
 		}
 		objStudentFile.close();
 	}
 
 	public ArrayList<Student> getAllStudentRecords() throws NullDataException {
-		if(this.vStudent.size() == 0) throw new NullDataException("~~~~~~~~~~ Student data is null ~~~~~~~~~~");
+		if(this.vStudent.size() == 0) throw null;
 		return this.vStudent;
 	}
 	
-	//이유 넣기 + exception처리해서 boolean을 void로 -> 과제
-	public boolean addStudentRecords(String studentInfo) {
-		if(this.vStudent.add(new Student(studentInfo))) return true;
-		else return false;
+	public BaseStatus addStudentRecords(String studentInfo) throws IOException {
+		if(this.vStudent.add(new Student(studentInfo)) && saveFile(vStudent)) return BaseStatus.SUCCESS;;
+		return BaseStatus.FAIL_ADD_STUDENT;
+	}
+
+	private boolean saveFile(ArrayList<Student> vStudent) throws IOException {
+			BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(sStudentFileName));	
+			for(int i=0; i<vStudent.size(); i++) {
+				String content = vStudent.get(i).savedData();
+				bufferedWriter.write(content);
+				bufferedWriter.newLine();
+			};
+			bufferedWriter.close();
+			return true;
 	}
 	
-	public boolean deleteStudentRecords(String studentId) {
+	public BaseStatus deleteStudentRecords(String studentId) throws IOException {
 		for (int i = 0; i < this.vStudent.size(); i++) {
 			Student student = (Student) this.vStudent.get(i);
 			if (student.match(studentId)) {
-				if(this.vStudent.remove(student)) return true;
-				else return false;
+				if(this.vStudent.remove(student) && saveFile(vStudent)) return BaseStatus.SUCCESS;
+				else return BaseStatus.FAIL_DELETE_STUDENT;
 			}
-		} return false;
+		} return BaseStatus.INVALID_STUDENTID;
 	}
 
 	public boolean isRegisteredStudent(String sSID) {
@@ -64,6 +79,16 @@ public class StudentList {
 			Student student = (Student) this.vStudent.get(i);
 			if (student.match(studentId)) {
 				return student.getCompletedCourse();
+			}
+		}
+		return null;
+	}
+
+	public String findPassword(String studentId) {
+		for (int i = 0; i < this.vStudent.size(); i++) {
+			Student student = (Student) this.vStudent.get(i);
+			if (student.match(studentId)) {
+				return student.getPassword();
 			}
 		}
 		return null;

@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -5,8 +6,8 @@ import java.util.ArrayList;
 public interface DataIF extends Remote{
 	ArrayList<Student> getAllStudentData() throws RemoteException, NullDataException;
 	ArrayList<Course> getAllCourseData() throws RemoteException;
-	boolean addStudent(String studentInfo) throws RemoteException;
-	boolean deleteStudent(String studentId) throws RemoteException;
+	BaseStatus addStudent(String studentInfo) throws RemoteException, IOException;
+	BaseStatus deleteStudent(String studentId) throws RemoteException, IOException;
 	void save(String name) throws RemoteException;
 	String find() throws RemoteException;
 	boolean deleteCourse(String courseId) throws RemoteException;
@@ -17,4 +18,5 @@ public interface DataIF extends Remote{
 	ArrayList<String> findAdvancedCourse(String courseId) throws RemoteException;
 	void registerCourse(String studentId, String courseID) throws RemoteException;
 	ArrayList<String> findRegisterCourse(String studentId) throws RemoteException;
+	String findStudentPassword(String studentId) throws RemoteException;
 }

@@ -2,11 +2,15 @@
 
 public enum BaseStatus {
 	
-	// 성공
+	// 성공 및 메뉴
 	SUCCESS(1000,"성공했습니다."),
+	NO_EXIST_MENU(1001, "없는 메뉴입니다."),
+	FAIL_LOGIN(1002, "잘못된 비밀번호입니다."),
 	
 	// 학생
 	INVALID_STUDENTID(2000, "존재하지 않는 학번입니다."),
+	FAIL_ADD_STUDENT(2001, "학생 등록에 실패했습니다."),
+	FAIL_DELETE_STUDENT(2002, "학생 삭제에 실패했습니다."),
 	
 	// 과목
 	INVALID_COURSEID(3000, "존재하지 않는 과목입니다."),

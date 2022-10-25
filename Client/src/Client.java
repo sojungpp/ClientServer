@@ -15,41 +15,56 @@ public class Client {
 		try {
 			server = (ServerIF)Naming.lookup("Server");
 			while(true) {
-				showMenu();
-				String userConsoleInput = inputReader.readLine().trim();
-				switch(userConsoleInput) {
-				case "1" :
-					showData(server.getAllStudentData());
-					break;
-				case "2" :
-					addStudent(server, inputReader);
-					break;
-				case "3" :
-					deleteStudent(server, inputReader);
-					break;
-				case "4" :
-					showData(server.getAllCourseData());
-					break;
-				case "5" :
-					addCourse(server, inputReader);
-					break;
-				case "6" :
-					deleteCourse(server, inputReader);
-					break;
-				case "7" :
-					registerCourse(server, inputReader);
-					break;	
-				case "x":
-					return;
-				default:
-					new BaseException(BaseStatus.NO_EXIST_MENU);
-				}
+				login(server, inputReader);
 			}
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		} catch (NullDataException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private static void initialMenu(ServerIF server, BufferedReader inputReader) throws IOException, RemoteException, NullDataException {
+		while(true) {
+		showMenu();
+		String userConsoleInput = inputReader.readLine().trim();
+		switch(userConsoleInput) {
+		case "1" :
+			showData(server.getAllStudentData());
+			break;
+		case "2" :
+			addStudent(server, inputReader);
+			break;
+		case "3" :
+			deleteStudent(server, inputReader);
+			break;
+		case "4" :
+			showData(server.getAllCourseData());
+			break;
+		case "5" :
+			addCourse(server, inputReader);
+			break;
+		case "6" :
+			deleteCourse(server, inputReader);
+			break;
+		case "7" :
+			registerCourse(server, inputReader);
+			break;	
+		case "x":
+			System.exit(0);
+		default:
+			new BaseException(BaseStatus.NO_EXIST_MENU);
+		}
+		}
+	}
+
+	private static void login(ServerIF server, BufferedReader inputReader) throws IOException, NullDataException {
+		System.out.println("*********************** LOGIN ***********************");
+		System.out.println("Student Id: "); String studentId = inputReader.readLine().trim();
+		System.out.println("Student Password: "); String studentPassword = inputReader.readLine().trim();
+		if(!server.findStudent(studentId)) new BaseException(BaseStatus.INVALID_STUDENTID);
+		else if(server.login(studentId, studentPassword)) initialMenu(server, inputReader);
+		else new BaseException(BaseStatus.FAIL_LOGIN);
 	}
 
 	private static void showMenu() {
@@ -65,27 +80,30 @@ public class Client {
 	}
 	
 	private static void showData(ArrayList<?> dataList) {
+		System.out.println("*********************** DATA ***********************");
 		String list = "";
 		for(int i=0; i<dataList.size(); i++) {
 			list += dataList.get(i) + "\n";
-		} System.out.println(list);;
+		} System.out.println(list);
 	}
 	
 	private static void addStudent(ServerIF server, BufferedReader inputReader) throws IOException, RemoteException {
 		System.out.println("-----Student Information-----");
 		System.out.println("Student Id: "); String studentId = inputReader.readLine().trim();
-		System.out.println("Student Name: "); String studentName = inputReader.readLine().trim();
+		System.out.println("Student Password: "); String studentPassword = inputReader.readLine().trim();
+		System.out.println("Student LastName: "); String lastName = inputReader.readLine().trim();
+		System.out.println("Student FirstName: "); String firstName = inputReader.readLine().trim();
 		System.out.println("Student Department: "); String studentDepartment = inputReader.readLine().trim();
 		System.out.println("Student Completed Course List: "); String completedCourses = inputReader.readLine().trim();
 		
-		if(server.addStudent(studentId + " " + studentName + " " + studentDepartment + " " + completedCourses)) System.out.println("SUCCESS");
-		else System.out.println("FAIL");
+		BaseStatus baseStatus = server.addStudent(studentId + " " + studentPassword + " " + lastName+ " " + firstName + " " + studentDepartment + " " + completedCourses);
+		new BaseException(baseStatus);
 	}
 	
 	private static void deleteStudent(ServerIF server, BufferedReader inputReader) throws RemoteException, IOException {
 		System.out.print("Student Id: ");
-		if(server.deleteStudent(inputReader.readLine().trim())) System.out.println("SUCCESS");
-		else System.out.println("FAIL");
+		BaseStatus baseStatus = server.deleteStudent(inputReader.readLine().trim());
+		new BaseException(baseStatus);
 	}
 	
 	private static void addCourse(ServerIF server, BufferedReader inputReader) throws IOException, RemoteException {
