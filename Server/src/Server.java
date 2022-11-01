@@ -57,24 +57,28 @@ public class Server extends UnicastRemoteObject implements ServerIF {
 
 	@Override
 	public BaseStatus addStudent(String studentInfo) throws IOException {
-		return data.addStudent(studentInfo);
+		if(!data.addStudent(studentInfo)) return BaseStatus.FAIL_ADD_STUDENT;
+		return BaseStatus.SUCCESS;
 	}
 
 	@Override
 	public BaseStatus deleteStudent(String studentId) throws IOException {
-		return data.deleteStudent(studentId);
+		if(!data.findStudent(studentId)) return BaseStatus.INVALID_STUDENTID;
+		if(!data.deleteStudent(studentId)) return BaseStatus.FAIL_DELETE_STUDENT;
+		return BaseStatus.SUCCESS;
+	}
+	
+	@Override
+	public BaseStatus addCourse(String courseInfo) throws IOException {
+		if(!data.addCourse(courseInfo)) return BaseStatus.FAIL_ADD_COURSE;
+		else return BaseStatus.SUCCESS;
 	}
 
 	@Override
-	public boolean deleteCourse(String courseId) throws RemoteException {
-		if(data.deleteCourse(courseId)) return true;
-		else return false;
-	}
-
-	@Override
-	public boolean addCourse(String courseInfo) throws RemoteException {
-		if(data.addCourse(courseInfo)) return true;
-		else return false;
+	public BaseStatus deleteCourse(String courseId) throws IOException {
+		if(!data.findCourse(courseId)) return BaseStatus.INVALID_COURSEID;
+		if(!data.deleteCourse(courseId)) return BaseStatus.FAIL_DELETE_COURSE;
+		else return BaseStatus.SUCCESS;
 	}
 
 	@Override
@@ -84,7 +88,7 @@ public class Server extends UnicastRemoteObject implements ServerIF {
 	}
 
 	@Override
-	public BaseStatus registerCourse(String studentId, String courseId) throws RemoteException {
+	public BaseStatus registerCourse(String studentId, String courseId) throws IOException {
 		if(!data.findStudent(studentId)) return BaseStatus.INVALID_STUDENTID;
 		if(!data.findCourse(courseId)) return BaseStatus.INVALID_COURSEID;
 		ArrayList<String> registerCourse = data.findRegisterCourse(studentId);
@@ -102,6 +106,11 @@ public class Server extends UnicastRemoteObject implements ServerIF {
 		String password = data.findStudentPassword(studentId);
 		if(password.equals(studentPassword)) return true;
 		return false;
+	}
+
+	@Override
+	public ArrayList<Registration> getAllRegistrationData() throws RemoteException, NullDataException {
+		return data.getAllRegistrationData();
 	}
 	
 }

@@ -11,9 +11,10 @@ public interface ServerIF extends Remote{
 	BaseStatus deleteStudent(String studentId) throws RemoteException, IOException;
 	void save(String name) throws RemoteException;
 	String find() throws RemoteException;
-	boolean deleteCourse(String courseId) throws RemoteException;
-	boolean addCourse(String courseInfo) throws RemoteException;
+	BaseStatus deleteCourse(String courseId) throws RemoteException, IOException;
+	BaseStatus addCourse(String courseInfo) throws RemoteException, IOException;
 	boolean findStudent(String studentId) throws RemoteException;
-	BaseStatus registerCourse(String studentId, String courseId) throws RemoteException;
+	BaseStatus registerCourse(String studentId, String courseId) throws RemoteException, IOException;
 	boolean login(String studentId, String studentPassword) throws RemoteException;
+	ArrayList<Registration> getAllRegistrationData() throws RemoteException, NullDataException;
 }

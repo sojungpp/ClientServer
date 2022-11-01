@@ -16,6 +16,8 @@ public enum BaseStatus {
 	INVALID_COURSEID(3000, "존재하지 않는 과목입니다."),
 	DO_NOT_TAKE_ADVANCEDCOURSE(3001, "선이수 과목을 수강하세요."),
 	ALREADY_COMPLETEDCOURSE(3002, "이미 수강한 과목입니다."),
+	FAIL_ADD_COURSE(3003, "과목 등록에 실패했습니다."),
+	FAIL_DELETE_COURSE(3004, "과목 삭제에 실패했습니다."),
 	
 	// 수강신청
 	ALREADY_REGISTRATION(4000, "이미 수강 신청한 과목입니다.");
@@ -35,8 +37,4 @@ public enum BaseStatus {
 	public String getMessage() {
 		return message;
 	}
-	
-	
-
-	
 }

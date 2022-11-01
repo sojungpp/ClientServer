@@ -31,9 +31,9 @@ public class StudentList {
 		return this.vStudent;
 	}
 	
-	public BaseStatus addStudentRecords(String studentInfo) throws IOException {
-		if(this.vStudent.add(new Student(studentInfo)) && saveFile(vStudent)) return BaseStatus.SUCCESS;;
-		return BaseStatus.FAIL_ADD_STUDENT;
+	public boolean addStudentRecords(String studentInfo) throws IOException {
+		if(this.vStudent.add(new Student(studentInfo)) && saveFile(vStudent)) return true;
+		return false;
 	}
 
 	private boolean saveFile(ArrayList<Student> vStudent) throws IOException {
@@ -47,14 +47,13 @@ public class StudentList {
 			return true;
 	}
 	
-	public BaseStatus deleteStudentRecords(String studentId) throws IOException {
+	public boolean deleteStudentRecords(String studentId) throws IOException {
 		for (int i = 0; i < this.vStudent.size(); i++) {
 			Student student = (Student) this.vStudent.get(i);
 			if (student.match(studentId)) {
-				if(this.vStudent.remove(student) && saveFile(vStudent)) return BaseStatus.SUCCESS;
-				else return BaseStatus.FAIL_DELETE_STUDENT;
+				if(this.vStudent.remove(student) && saveFile(vStudent)) return true;
 			}
-		} return BaseStatus.INVALID_STUDENTID;
+		} return false;
 	}
 
 	public boolean isRegisteredStudent(String sSID) {

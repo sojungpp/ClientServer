@@ -40,7 +40,7 @@ public class Data extends UnicastRemoteObject implements DataIF {
 	}
 	
 	@Override
-	public void save (String name) throws RemoteException { 
+	public void save(String name) throws RemoteException { 
 		System.out.println("Server's response !!!");
 		this.name = name;
 	}
@@ -62,23 +62,23 @@ public class Data extends UnicastRemoteObject implements DataIF {
 	}
 
 	@Override
-	public BaseStatus addStudent(String studentInfo) throws IOException {
+	public boolean addStudent(String studentInfo) throws IOException {
 		return studentList.addStudentRecords(studentInfo);
 	}
 
 	@Override
-	public BaseStatus deleteStudent(String studentId) throws IOException {
+	public boolean deleteStudent(String studentId) throws IOException {
 		return studentList.deleteStudentRecords(studentId);
 	}
 
 	@Override
-	public boolean deleteCourse(String courseId) throws RemoteException {
+	public boolean deleteCourse(String courseId) throws IOException {
 		if(courseList.deleteCourseRecords(courseId)) return true;
 		else return false;
 	}
 
 	@Override
-	public boolean addCourse(String courseInfo) throws RemoteException {
+	public boolean addCourse(String courseInfo) throws IOException {
 		if(courseList.addCourseRecords(courseInfo)) return true;
 		else return false;
 	}
@@ -106,7 +106,7 @@ public class Data extends UnicastRemoteObject implements DataIF {
 	}
 
 	@Override
-	public void registerCourse(String studentId, String courseId) throws RemoteException {
+	public void registerCourse(String studentId, String courseId) throws IOException {
 		registrationList.addRegistrationRecords(studentId, courseId);
 	}
 
@@ -119,6 +119,13 @@ public class Data extends UnicastRemoteObject implements DataIF {
 	public String findStudentPassword(String studentId) throws RemoteException {
 		return studentList.findPassword(studentId);
 	}
+
+	@Override
+	public ArrayList<Registration> getAllRegistrationData() throws RemoteException, NullDataException {
+		return registrationList.getAllRegistrationRecords();
+	}
+
+
 
 	
 }
