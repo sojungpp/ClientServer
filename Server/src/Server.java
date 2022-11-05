@@ -31,11 +31,28 @@ public class Server extends UnicastRemoteObject implements ServerIF {
 			e.printStackTrace();
 		}
 	}
+	
+	@Override
+	public BaseStatus login(String userId, String studentPassword) throws SecurityException, IOException {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), null);
+		if(!data.findStudent(userId, null)) return BaseStatus.INVALID_STUDENTID;
+		String password = data.findStudentPassword(userId);
+		if(!password.equals(studentPassword)) return BaseStatus.SUCCESS;
+		else return BaseStatus.FAIL_LOGIN;
+	}
 
 	@Override
 	public ArrayList<Student> getAllStudentData(String token) throws SecurityException, Exception {
 		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), decipherToken(token));
 		return data.getAllStudentData(decipherToken(token));
+	}
+	
+	@Override
+	public BaseStatus addStudent(String studentId, String studentInfo, String token) throws SecurityException, Exception {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), decipherToken(token));
+		if(data.findStudent(studentId, decipherToken(token))) return BaseStatus.ALREADY_STUDENTID;
+		if(!data.addStudent(studentInfo, decipherToken(token))) return BaseStatus.FAIL_ADD_STUDENT;
+		return BaseStatus.SUCCESS;
 	}
 
 	@Override
@@ -44,12 +61,6 @@ public class Server extends UnicastRemoteObject implements ServerIF {
 		return data.getAllCourseData(decipherToken(token));
 	}
 
-	@Override
-	public BaseStatus addStudent(String studentInfo, String token) throws SecurityException, Exception {
-		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), decipherToken(token));
-		if(!data.addStudent(studentInfo, decipherToken(token))) return BaseStatus.FAIL_ADD_STUDENT;
-		return BaseStatus.SUCCESS;
-	}
 
 	@Override
 	public BaseStatus deleteStudent(String studentId, String token) throws SecurityException, Exception {
@@ -97,13 +108,6 @@ public class Server extends UnicastRemoteObject implements ServerIF {
 		return BaseStatus.SUCCESS;
 	}
 
-	@Override
-	public boolean login(String studentId, String studentPassword) throws SecurityException, IOException {
-		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), null);
-		String password = data.findStudentPassword(studentId);
-		if(password.equals(studentPassword)) return true;
-		return false;
-	}
 
 	@Override
 	public ArrayList<Registration> getAllRegistrationData(String token) throws Exception {

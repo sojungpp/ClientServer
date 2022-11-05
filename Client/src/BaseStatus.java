@@ -11,6 +11,7 @@ public enum BaseStatus {
 	INVALID_STUDENTID(2000, "존재하지 않는 학번입니다."),
 	FAIL_ADD_STUDENT(2001, "학생 등록에 실패했습니다."),
 	FAIL_DELETE_STUDENT(2002, "학생 삭제에 실패했습니다."),
+	ALREADY_STUDENTID(2003, "이미 존재하는 학번입니다."),
 	
 	// 과목
 	INVALID_COURSEID(3000, "존재하지 않는 과목입니다."),

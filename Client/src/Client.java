@@ -31,13 +31,13 @@ public class Client {
 		System.out.println("*********************** LOGIN (Exit: x) ***********************");
 		System.out.println("Student Id: "); String studentId = inputReader.readLine().trim();
 		if(studentId.equals("x")) System.exit(0);
-		System.out.println("Student Password: "); String studentPassword = inputReader.readLine().trim();
-		if(!server.findStudent(studentId)) new BaseException(BaseStatus.INVALID_STUDENTID);
-		else if(server.login(studentId, studentPassword)) {
+		System.out.println("Student Password: "); String studentPassword = inputReader.readLine().trim(); 
+		BaseStatus baseStatus = server.login(studentId, studentPassword);
+		if(baseStatus==BaseStatus.SUCCESS) {
 			String token = server.createToken(studentId);
 			initialMenu(server, inputReader, token);
 		}
-		else new BaseException(BaseStatus.FAIL_LOGIN);
+		else new BaseException(baseStatus);
 	}
 
 	
@@ -87,7 +87,7 @@ public class Client {
 				showData(server.getAllRegistrationData(token), server, token);
 				break;
 			case "x":
-				System.exit(0);
+				return;
 			default:
 				new BaseException(BaseStatus.NO_EXIST_MENU);
 		}
@@ -113,7 +113,7 @@ public class Client {
 		System.out.println("Student Department: "); String studentDepartment = inputReader.readLine().trim();
 		System.out.println("Student Completed Course List: "); String completedCourses = inputReader.readLine().trim();
 		
-		BaseStatus baseStatus = server.addStudent(studentId + " " + studentPassword + " " + lastName+ " " + firstName + " " + studentDepartment + " " + completedCourses, token);
+		BaseStatus baseStatus = server.addStudent(studentId, studentId + " " + studentPassword + " " + lastName+ " " + firstName + " " + studentDepartment + " " + completedCourses, token);
 		new BaseException(baseStatus);
 	}
 	

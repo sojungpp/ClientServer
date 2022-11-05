@@ -40,11 +40,25 @@ public class Data extends UnicastRemoteObject implements DataIF {
 			e.printStackTrace();
 		} 
 	}
+	
+	@Override
+	public boolean findStudent(String studentId, String userId) throws SecurityException, IOException {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
+		if(studentList.findStudent(studentId)) return true;
+		return false;
+	}
 
 	@Override
 	public ArrayList<Student> getAllStudentData(String userId) throws NullDataException, SecurityException, IOException {
 		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		return studentList.getAllStudentRecords();
+	}
+	
+	
+	@Override
+	public boolean addStudent(String studentInfo, String userId) throws IOException {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
+		return studentList.addStudentRecords(studentInfo);
 	}
 
 	@Override
@@ -53,11 +67,6 @@ public class Data extends UnicastRemoteObject implements DataIF {
 		return courseList.getAllCourseRecords();
 	}
 
-	@Override
-	public boolean addStudent(String studentInfo, String userId) throws IOException {
-		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
-		return studentList.addStudentRecords(studentInfo);
-	}
 
 	@Override
 	public boolean deleteStudent(String studentId, String userId) throws IOException {
@@ -77,13 +86,6 @@ public class Data extends UnicastRemoteObject implements DataIF {
 		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		if(courseList.addCourseRecords(courseInfo)) return true;
 		else return false;
-	}
-
-	@Override
-	public boolean findStudent(String studentId, String userId) throws SecurityException, IOException {
-		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
-		if(studentList.findStudent(studentId)) return true;
-		return false;
 	}
 
 	@Override
