@@ -43,88 +43,112 @@ public class Data extends UnicastRemoteObject implements DataIF {
 	}
 	
 	@Override
-	public void save(String name) throws RemoteException { 
+	public void save(String name) throws SecurityException, IOException { 
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		System.out.println("Server's response !!!");
 		this.name = name;
 	}
 
 	@Override
-	public String find() throws RemoteException {
+	public String find() throws SecurityException, IOException {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		System.out.println("Server's response !!!");
 		return name;
 	}
 
 	@Override
-	public ArrayList<Student> getAllStudentData() throws RemoteException, NullDataException {
+	public ArrayList<Student> getAllStudentData(String userId) throws NullDataException, SecurityException, IOException {
+		this.userId = userId;
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		return studentList.getAllStudentRecords();
 	}
 
 	@Override
-	public ArrayList<Course> getAllCourseData() throws RemoteException {
+	public ArrayList<Course> getAllCourseData(String userId) throws SecurityException, IOException {
+		this.userId = userId;
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		return courseList.getAllCourseRecords();
 	}
 
 	@Override
-	public boolean addStudent(String studentInfo) throws IOException {
+	public boolean addStudent(String studentInfo, String userId) throws IOException {
+		this.userId = userId;
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		return studentList.addStudentRecords(studentInfo);
 	}
 
 	@Override
-	public boolean deleteStudent(String studentId) throws IOException {
+	public boolean deleteStudent(String studentId, String userId) throws IOException {
+		this.userId = userId;
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		return studentList.deleteStudentRecords(studentId);
 	}
 
 	@Override
-	public boolean deleteCourse(String courseId) throws IOException {
+	public boolean deleteCourse(String courseId, String userId) throws IOException {
+		this.userId = userId;
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		if(courseList.deleteCourseRecords(courseId)) return true;
 		else return false;
 	}
 
 	@Override
-	public boolean addCourse(String courseInfo) throws IOException {
+	public boolean addCourse(String courseInfo, String userId) throws IOException {
+		this.userId = userId;
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		if(courseList.addCourseRecords(courseInfo)) return true;
 		else return false;
 	}
 
 	@Override
-	public boolean findStudent(String studentId) throws RemoteException {
+	public boolean findStudent(String studentId, String userId) throws SecurityException, IOException {
+		this.userId = userId;
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		if(studentList.findStudent(studentId)) return true;
 		return false;
 	}
 
 	@Override
-	public boolean findCourse(String courseId) throws RemoteException {
+	public boolean findCourse(String courseId, String userId) throws SecurityException, IOException {
+		this.userId = userId;
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		if(courseList.findCourse(courseId)) return true;
 		return false;
 	}
 
 	@Override
-	public ArrayList<String> findCompletedCourse(String studentId) throws RemoteException {
+	public ArrayList<String> findCompletedCourse(String studentId) throws SecurityException, IOException {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		return studentList.findCompletedCourse(studentId);
 	}
 
 	@Override
-	public ArrayList<String> findAdvancedCourse(String courseId) throws RemoteException {
+	public ArrayList<String> findAdvancedCourse(String courseId) throws SecurityException, IOException {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		return courseList.findAdvancedCourse(courseId);
 	}
 
 	@Override
 	public void registerCourse(String studentId, String courseId) throws IOException {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		registrationList.addRegistrationRecords(studentId, courseId);
 	}
 
 	@Override
-	public ArrayList<String> findRegisterCourse(String studentId) {
+	public ArrayList<String> findRegisterCourse(String studentId) throws SecurityException, IOException {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		return registrationList.findregisterCourse(studentId);
 	}
 
 	@Override
-	public String findStudentPassword(String studentId) throws RemoteException {
+	public String findStudentPassword(String studentId) throws SecurityException, IOException {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		return studentList.findPassword(studentId);
 	}
 
 	@Override
-	public ArrayList<Registration> getAllRegistrationData() throws RemoteException, NullDataException {
+	public ArrayList<Registration> getAllRegistrationData() throws NullDataException, SecurityException, IOException {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		return registrationList.getAllRegistrationRecords();
 	}
 

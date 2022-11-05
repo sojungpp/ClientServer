@@ -53,57 +53,57 @@ public class Server extends UnicastRemoteObject implements ServerIF {
 	@Override
 	public  ArrayList<Student> getAllStudentData() throws NullDataException, IOException {
 		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
-		return data.getAllStudentData();
+		return data.getAllStudentData(userId);
 	}
 
 	@Override
 	public ArrayList<Course> getAllCourseData() throws IOException {
 		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
-		return data.getAllCourseData();
+		return data.getAllCourseData(userId);
 	}
 
 	@Override
 	public BaseStatus addStudent(String studentInfo) throws IOException {
 		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
-		if(!data.addStudent(studentInfo)) return BaseStatus.FAIL_ADD_STUDENT;
+		if(!data.addStudent(studentInfo, userId)) return BaseStatus.FAIL_ADD_STUDENT;
 		return BaseStatus.SUCCESS;
 	}
 
 	@Override
 	public BaseStatus deleteStudent(String studentId) throws IOException {
 		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
-		if(!data.findStudent(studentId)) return BaseStatus.INVALID_STUDENTID;
-		if(!data.deleteStudent(studentId)) return BaseStatus.FAIL_DELETE_STUDENT;
+		if(!data.findStudent(studentId, userId)) return BaseStatus.INVALID_STUDENTID;
+		if(!data.deleteStudent(studentId, userId)) return BaseStatus.FAIL_DELETE_STUDENT;
 		return BaseStatus.SUCCESS;
 	}
 	
 	@Override
 	public BaseStatus addCourse(String courseInfo) throws IOException {
 		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
-		if(!data.addCourse(courseInfo)) return BaseStatus.FAIL_ADD_COURSE;
+		if(!data.addCourse(courseInfo, userId)) return BaseStatus.FAIL_ADD_COURSE;
 		else return BaseStatus.SUCCESS;
 	}
 
 	@Override
 	public BaseStatus deleteCourse(String courseId) throws IOException {
 		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
-		if(!data.findCourse(courseId)) return BaseStatus.INVALID_COURSEID;
-		if(!data.deleteCourse(courseId)) return BaseStatus.FAIL_DELETE_COURSE;
+		if(!data.findCourse(courseId, userId)) return BaseStatus.INVALID_COURSEID;
+		if(!data.deleteCourse(courseId, userId)) return BaseStatus.FAIL_DELETE_COURSE;
 		else return BaseStatus.SUCCESS;
 	}
 
 	@Override
 	public boolean findStudent(String studentId) throws SecurityException, IOException {
 		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
-		if(data.findStudent(studentId)) return true;
+		if(data.findStudent(studentId, userId)) return true;
 		return false;
 	}
 
 	@Override
 	public BaseStatus registerCourse(String studentId, String courseId) throws IOException {
 		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
-		if(!data.findStudent(studentId)) return BaseStatus.INVALID_STUDENTID;
-		if(!data.findCourse(courseId)) return BaseStatus.INVALID_COURSEID;
+		if(!data.findStudent(studentId, userId)) return BaseStatus.INVALID_STUDENTID;
+		if(!data.findCourse(courseId, userId)) return BaseStatus.INVALID_COURSEID;
 		ArrayList<String> registerCourse = data.findRegisterCourse(studentId);
 		ArrayList<String> completedCourse = data.findCompletedCourse(studentId);
 		ArrayList<String> advancedCourse = data.findAdvancedCourse(courseId);

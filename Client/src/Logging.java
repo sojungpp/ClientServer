@@ -34,7 +34,7 @@ public class Logging {
         // add new log handler
         Handler handler = new FileHandler("client.log", true);
         handler.setFormatter(new SimpleFormatter() {
-            private static final String format = "[%1$tF %1$tT] %2$-12s | %3$s %n";
+            private static final String format = "[%1$tF %1$tT] %2$-20s | %3$s %n";
             
             @Override
             public synchronized String format(LogRecord lr) {
