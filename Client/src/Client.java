@@ -8,6 +8,9 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 public class Client {
+	
+	private final static Logging logger = Logging.getLogger();
+	private static String userId;
 
 	public static void main(String[] args) throws NotBoundException, IOException{
 		ServerIF server;
@@ -25,16 +28,23 @@ public class Client {
 	}
 
 	private static void login(ServerIF server, BufferedReader inputReader) throws IOException, NullDataException {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		System.out.println("*********************** LOGIN (Exit: x) ***********************");
 		System.out.println("Student Id: "); String studentId = inputReader.readLine().trim();
 		if(studentId.equals("x")) System.exit(0);
 		System.out.println("Student Password: "); String studentPassword = inputReader.readLine().trim();
 		if(!server.findStudent(studentId)) new BaseException(BaseStatus.INVALID_STUDENTID);
-		else if(server.login(studentId, studentPassword)) initialMenu(server, inputReader);
+		else if(server.login(studentId, studentPassword)) {
+			userId = studentId;
+			initialMenu(server, inputReader);
+		}
 		else new BaseException(BaseStatus.FAIL_LOGIN);
 	}
+
 	
-	private static void showMenu() {
+
+	private static void showMenu() throws SecurityException, IOException {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		System.out.println("\n *********************** MENU ***********************");
 		System.out.println("1. List Students");
 		System.out.println("2. Add Student");
@@ -48,6 +58,7 @@ public class Client {
 	}
 	
 	private static void initialMenu(ServerIF server, BufferedReader inputReader) throws IOException, RemoteException, NullDataException {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		while(true) {
 		showMenu();
 		String userConsoleInput = inputReader.readLine().trim();
@@ -84,7 +95,8 @@ public class Client {
 		}
 	}
 	
-	private static void showData(ArrayList<?> dataList) {
+	private static void showData(ArrayList<?> dataList) throws SecurityException, IOException {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		System.out.println("*********************** DATA ***********************");
 		String list = "";
 		for(int i=0; i<dataList.size(); i++) {
@@ -93,6 +105,7 @@ public class Client {
 	}
 	
 	private static void addStudent(ServerIF server, BufferedReader inputReader) throws IOException, RemoteException {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		System.out.println("*********************** Student Information ***********************");
 		System.out.println("Student Id: "); String studentId = inputReader.readLine().trim();
 		System.out.println("Student Password: "); String studentPassword = inputReader.readLine().trim();
@@ -106,12 +119,14 @@ public class Client {
 	}
 	
 	private static void deleteStudent(ServerIF server, BufferedReader inputReader) throws RemoteException, IOException {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		System.out.print("Student Id: ");
 		BaseStatus baseStatus = server.deleteStudent(inputReader.readLine().trim());
 		new BaseException(baseStatus);
 	}
 	
 	private static void addCourse(ServerIF server, BufferedReader inputReader) throws IOException, RemoteException {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		System.out.println("-----Course Information-----");
 		System.out.println("Course Id: "); String courseId = inputReader.readLine().trim();
 		System.out.println("Professor Name: "); String professorName = inputReader.readLine().trim();
@@ -123,12 +138,14 @@ public class Client {
 	}
 
 	private static void deleteCourse(ServerIF server, BufferedReader inputReader) throws RemoteException, IOException {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		System.out.print("Course Id: ");
 		BaseStatus baseStatus = server.deleteCourse(inputReader.readLine().trim());
 		new BaseException(baseStatus);
 	}
 	
 	private static void registerCourse(ServerIF server, BufferedReader inputReader) throws IOException, RemoteException {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		System.out.println("Student Id: "); String studentId = inputReader.readLine().trim();
 		showData(server.getAllCourseData());
 		System.out.println("Course Id: "); String courseId = inputReader.readLine().trim();

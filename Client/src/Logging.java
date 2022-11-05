@@ -1,39 +1,56 @@
 
 import java.io.IOException;
-import java.util.logging.ConsoleHandler;
+import java.util.Date;
 import java.util.logging.FileHandler;
-import java.util.logging.Formatter;
 import java.util.logging.Handler;
-import java.util.logging.Level;
+import java.util.logging.LogRecord;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 public class Logging {
 	
     private final static Logger LOG = Logger.getGlobal();
+    private static String methodName;
+    private static String id;
+    
     Logger logger = Logger.getLogger("mylogger");
 	private static Logging instance = new Logging();
     
     public static void main(String[] args) throws SecurityException, IOException {
-        //=============================================
-        // 기본 로그 제거
-        //------------
-        Logger rootLogger = Logger.getLogger("");
-        Handler[] handlers = rootLogger.getHandlers();
-        if (handlers[0] instanceof ConsoleHandler) {
-            rootLogger.removeHandler(handlers[0]);
-        }
-        //=============================================
-        
-        LOG.setLevel(Level.INFO);
-        
-        Handler handler = new FileHandler("client.log", true);
-        
-        LogFormatter formatter = new LogFormatter();
-        handler.setFormatter(formatter);
-        LOG.addHandler(handler);
-        
-        LOG.severe("severe Log");
-        LOG.warning("warning Log");
-        LOG.info("info Log");
     }  
+    
+    public static Logging getLogger() {
+		return instance;
+	}
+    
+    public void log(String msg, String userId) throws SecurityException, IOException {
+    	
+    	 // remove default log handler
+        logger.setUseParentHandlers(false);
+        methodName = msg;
+        id = userId;
+        
+
+        // add new log handler
+        Handler handler = new FileHandler("client.log", true);
+        handler.setFormatter(new SimpleFormatter() {
+            private static final String format = "[%1$tF %1$tT] %2$-12s | %3$s %n";
+            
+            @Override
+            public synchronized String format(LogRecord lr) {
+            	lr.setSourceMethodName(methodName);
+
+                return String.format(format,
+                        new Date(lr.getMillis()),
+                        lr.getSourceMethodName(),
+                        id
+                );
+            }
+        });
+        logger.addHandler(handler);
+
+        // logging
+        logger.info("");
+	}
+    
 }
