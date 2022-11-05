@@ -10,9 +10,8 @@ import java.util.ArrayList;
 public class Client {
 	
 	private final static Logging logger = Logging.getLogger();
-	private static String userId;
 
-	public static void main(String[] args) throws NotBoundException, IOException{
+	public static void main(String[] args) throws SecurityException, Exception{
 		ServerIF server;
 		BufferedReader inputReader = new BufferedReader(new InputStreamReader(System.in));
 		try {
@@ -27,24 +26,24 @@ public class Client {
 		}
 	}
 
-	private static void login(ServerIF server, BufferedReader inputReader) throws IOException, NullDataException {
-		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
+	private static void login(ServerIF server, BufferedReader inputReader) throws SecurityException, Exception {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), null);
 		System.out.println("*********************** LOGIN (Exit: x) ***********************");
 		System.out.println("Student Id: "); String studentId = inputReader.readLine().trim();
 		if(studentId.equals("x")) System.exit(0);
 		System.out.println("Student Password: "); String studentPassword = inputReader.readLine().trim();
 		if(!server.findStudent(studentId)) new BaseException(BaseStatus.INVALID_STUDENTID);
 		else if(server.login(studentId, studentPassword)) {
-			userId = studentId;
-			initialMenu(server, inputReader);
+			String token = server.createToken(studentId);
+			initialMenu(server, inputReader, token);
 		}
 		else new BaseException(BaseStatus.FAIL_LOGIN);
 	}
 
 	
 
-	private static void showMenu() throws SecurityException, IOException {
-		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
+	private static void showMenu(ServerIF server, String token) throws Exception {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), server.decipherToken(token));
 		System.out.println("\n *********************** MENU ***********************");
 		System.out.println("1. List Students");
 		System.out.println("2. Add Student");
@@ -57,35 +56,35 @@ public class Client {
 		System.out.println("x. Exit");
 	}
 	
-	private static void initialMenu(ServerIF server, BufferedReader inputReader) throws IOException, RemoteException, NullDataException {
-		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
+	private static void initialMenu(ServerIF server, BufferedReader inputReader, String token) throws SecurityException, Exception {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), server.decipherToken(token));
 		while(true) {
-		showMenu();
+		showMenu(server, token);
 		String userConsoleInput = inputReader.readLine().trim();
 		switch(userConsoleInput) {
 			case "1" :
-				showData(server.getAllStudentData());
+				showData(server.getAllStudentData(token), server, token);
 				break;
 			case "2" :
-				addStudent(server, inputReader);
+				addStudent(server, inputReader, token);
 				break;
 			case "3" :
-				deleteStudent(server, inputReader);
+				deleteStudent(server, inputReader, token);
 				break;
 			case "4" :
-				showData(server.getAllCourseData());
+				showData(server.getAllCourseData(token), server, token);
 				break;
 			case "5" :
-				addCourse(server, inputReader);
+				addCourse(server, inputReader, token);
 				break;
 			case "6" :
-				deleteCourse(server, inputReader);
+				deleteCourse(server, inputReader, token);
 				break;
 			case "7" :
-				registerCourse(server, inputReader);
+				registerCourse(server, inputReader, token);
 				break;	
 			case "8" :
-				showData(server.getAllRegistrationData());
+				showData(server.getAllRegistrationData(token), server, token);
 				break;
 			case "x":
 				System.exit(0);
@@ -95,8 +94,8 @@ public class Client {
 		}
 	}
 	
-	private static void showData(ArrayList<?> dataList) throws SecurityException, IOException {
-		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
+	private static void showData(ArrayList<?> dataList, ServerIF server, String token) throws Exception {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), server.decipherToken(token));
 		System.out.println("*********************** DATA ***********************");
 		String list = "";
 		for(int i=0; i<dataList.size(); i++) {
@@ -104,8 +103,8 @@ public class Client {
 		} System.out.println(list);
 	}
 	
-	private static void addStudent(ServerIF server, BufferedReader inputReader) throws IOException, RemoteException {
-		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
+	private static void addStudent(ServerIF server, BufferedReader inputReader, String token) throws SecurityException, Exception {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), server.decipherToken(token));
 		System.out.println("*********************** Student Information ***********************");
 		System.out.println("Student Id: "); String studentId = inputReader.readLine().trim();
 		System.out.println("Student Password: "); String studentPassword = inputReader.readLine().trim();
@@ -114,42 +113,41 @@ public class Client {
 		System.out.println("Student Department: "); String studentDepartment = inputReader.readLine().trim();
 		System.out.println("Student Completed Course List: "); String completedCourses = inputReader.readLine().trim();
 		
-		BaseStatus baseStatus = server.addStudent(studentId + " " + studentPassword + " " + lastName+ " " + firstName + " " + studentDepartment + " " + completedCourses);
+		BaseStatus baseStatus = server.addStudent(studentId + " " + studentPassword + " " + lastName+ " " + firstName + " " + studentDepartment + " " + completedCourses, token);
 		new BaseException(baseStatus);
 	}
 	
-	private static void deleteStudent(ServerIF server, BufferedReader inputReader) throws RemoteException, IOException {
-		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
+	private static void deleteStudent(ServerIF server, BufferedReader inputReader, String token) throws SecurityException, Exception {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), server.decipherToken(token));
 		System.out.print("Student Id: ");
-		BaseStatus baseStatus = server.deleteStudent(inputReader.readLine().trim());
+		BaseStatus baseStatus = server.deleteStudent(inputReader.readLine().trim(), token);
 		new BaseException(baseStatus);
 	}
 	
-	private static void addCourse(ServerIF server, BufferedReader inputReader) throws IOException, RemoteException {
-		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
+	private static void addCourse(ServerIF server, BufferedReader inputReader, String token) throws SecurityException, Exception {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), server.decipherToken(token));
 		System.out.println("-----Course Information-----");
 		System.out.println("Course Id: "); String courseId = inputReader.readLine().trim();
 		System.out.println("Professor Name: "); String professorName = inputReader.readLine().trim();
 		System.out.println("Course Name: "); String courseName = inputReader.readLine().trim();
 		System.out.println("Advanced Course List: "); String advancedCourses = inputReader.readLine().trim();
 		
-		BaseStatus baseStatus = server.addCourse(courseId + " " + professorName + " " + courseName + " " + advancedCourses);
+		BaseStatus baseStatus = server.addCourse(courseId + " " + professorName + " " + courseName + " " + advancedCourses, token);
 		new BaseException(baseStatus);
 	}
 
-	private static void deleteCourse(ServerIF server, BufferedReader inputReader) throws RemoteException, IOException {
-		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
+	private static void deleteCourse(ServerIF server, BufferedReader inputReader, String token) throws SecurityException, Exception {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), server.decipherToken(token));
 		System.out.print("Course Id: ");
-		BaseStatus baseStatus = server.deleteCourse(inputReader.readLine().trim());
+		BaseStatus baseStatus = server.deleteCourse(inputReader.readLine().trim(), token);
 		new BaseException(baseStatus);
 	}
 	
-	private static void registerCourse(ServerIF server, BufferedReader inputReader) throws IOException, RemoteException {
-		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
-		System.out.println("Student Id: "); String studentId = inputReader.readLine().trim();
-		showData(server.getAllCourseData());
+	private static void registerCourse(ServerIF server, BufferedReader inputReader, String token) throws SecurityException, Exception {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), server.decipherToken(token));
+		showData(server.getAllCourseData(token), server, token);
 		System.out.println("Course Id: "); String courseId = inputReader.readLine().trim();
-		BaseStatus baseStatus = server.registerCourse(studentId, courseId);
+		BaseStatus baseStatus = server.registerCourse(token, courseId);
 		new BaseException(baseStatus);
 	}
 

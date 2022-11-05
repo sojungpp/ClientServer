@@ -5,16 +5,16 @@ import java.util.ArrayList;
 
 
 public interface ServerIF extends Remote{
-	ArrayList<Student> getAllStudentData() throws RemoteException, NullDataException, SecurityException, IOException;
-	ArrayList<Course> getAllCourseData() throws RemoteException, IOException;
-	BaseStatus addStudent(String studentInfo) throws RemoteException, IOException;
-	BaseStatus deleteStudent(String studentId) throws RemoteException, IOException;
-	void save(String name) throws RemoteException, SecurityException, IOException;
-	String find() throws RemoteException, SecurityException, IOException;
-	BaseStatus deleteCourse(String courseId) throws RemoteException, IOException;
-	BaseStatus addCourse(String courseInfo) throws RemoteException, IOException;
+	ArrayList<Student> getAllStudentData(String token) throws RemoteException, NullDataException, SecurityException, IOException, Exception;
+	ArrayList<Course> getAllCourseData(String token) throws RemoteException, IOException, SecurityException, Exception;
+	BaseStatus addStudent(String studentInfo, String token) throws RemoteException, IOException, SecurityException, Exception;
+	BaseStatus deleteStudent(String studentId, String token) throws RemoteException, IOException, SecurityException, Exception;
+	BaseStatus deleteCourse(String courseId, String token) throws RemoteException, IOException, SecurityException, Exception;
+	BaseStatus addCourse(String courseInfo, String token) throws RemoteException, IOException, SecurityException, Exception;
 	boolean findStudent(String studentId) throws RemoteException, SecurityException, IOException;
-	BaseStatus registerCourse(String studentId, String courseId) throws RemoteException, IOException;
-	boolean login(String studentId, String studentPassword) throws RemoteException, SecurityException, IOException;
-	ArrayList<Registration> getAllRegistrationData() throws RemoteException, NullDataException, SecurityException, IOException;
+	BaseStatus registerCourse(String token, String courseId) throws RemoteException, IOException, SecurityException, Exception;
+	boolean login(String studentId, String studentPassword) throws RemoteException, IOException;
+	ArrayList<Registration> getAllRegistrationData(String token) throws RemoteException, NullDataException, SecurityException, IOException, Exception;
+	String createToken(String studentId) throws SecurityException, IOException, Exception;
+	String decipherToken(String studentId) throws SecurityException, IOException, Exception;
 }
