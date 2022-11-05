@@ -8,6 +8,9 @@ import java.util.ArrayList;
 
 
 public class Data extends UnicastRemoteObject implements DataIF {
+	
+	private final static Logging logger = Logging.getLogger();
+	private static String userId;
 
 	private static final long serialVersionUID = 1L;
 	protected static StudentList studentList;

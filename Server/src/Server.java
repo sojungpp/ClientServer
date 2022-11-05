@@ -9,6 +9,9 @@ import java.util.ArrayList;
 
 public class Server extends UnicastRemoteObject implements ServerIF {
 	
+	private final static Logging logger = Logging.getLogger();
+	private static String userId;
+	
 	private static final long serialVersionUID = 1L;
 	private static DataIF data;
 	private static BaseException baseException;
@@ -34,35 +37,41 @@ public class Server extends UnicastRemoteObject implements ServerIF {
 	}
 
 	@Override
-	public void save (String name) throws RemoteException { 
+	public void save (String name) throws SecurityException, IOException { 
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		System.out.println("Server's response !!!");
 		this.name = name;
 	}
 
 	@Override
-	public String find() throws RemoteException {
+	public String find() throws IOException {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		System.out.println("Server's response !!!");
 		return name;
 	}
 
 	@Override
-	public  ArrayList<Student> getAllStudentData() throws RemoteException, NullDataException {
+	public  ArrayList<Student> getAllStudentData() throws NullDataException, IOException {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		return data.getAllStudentData();
 	}
 
 	@Override
-	public ArrayList<Course> getAllCourseData() throws RemoteException {
+	public ArrayList<Course> getAllCourseData() throws IOException {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		return data.getAllCourseData();
 	}
 
 	@Override
 	public BaseStatus addStudent(String studentInfo) throws IOException {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		if(!data.addStudent(studentInfo)) return BaseStatus.FAIL_ADD_STUDENT;
 		return BaseStatus.SUCCESS;
 	}
 
 	@Override
 	public BaseStatus deleteStudent(String studentId) throws IOException {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		if(!data.findStudent(studentId)) return BaseStatus.INVALID_STUDENTID;
 		if(!data.deleteStudent(studentId)) return BaseStatus.FAIL_DELETE_STUDENT;
 		return BaseStatus.SUCCESS;
@@ -70,25 +79,29 @@ public class Server extends UnicastRemoteObject implements ServerIF {
 	
 	@Override
 	public BaseStatus addCourse(String courseInfo) throws IOException {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		if(!data.addCourse(courseInfo)) return BaseStatus.FAIL_ADD_COURSE;
 		else return BaseStatus.SUCCESS;
 	}
 
 	@Override
 	public BaseStatus deleteCourse(String courseId) throws IOException {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		if(!data.findCourse(courseId)) return BaseStatus.INVALID_COURSEID;
 		if(!data.deleteCourse(courseId)) return BaseStatus.FAIL_DELETE_COURSE;
 		else return BaseStatus.SUCCESS;
 	}
 
 	@Override
-	public boolean findStudent(String studentId) throws RemoteException {
+	public boolean findStudent(String studentId) throws SecurityException, IOException {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		if(data.findStudent(studentId)) return true;
 		return false;
 	}
 
 	@Override
 	public BaseStatus registerCourse(String studentId, String courseId) throws IOException {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		if(!data.findStudent(studentId)) return BaseStatus.INVALID_STUDENTID;
 		if(!data.findCourse(courseId)) return BaseStatus.INVALID_COURSEID;
 		ArrayList<String> registerCourse = data.findRegisterCourse(studentId);
@@ -102,14 +115,19 @@ public class Server extends UnicastRemoteObject implements ServerIF {
 	}
 
 	@Override
-	public boolean login(String studentId, String studentPassword) throws RemoteException {
+	public boolean login(String studentId, String studentPassword) throws SecurityException, IOException {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		String password = data.findStudentPassword(studentId);
-		if(password.equals(studentPassword)) return true;
+		if(password.equals(studentPassword)) {
+			userId = studentId;
+			return true;
+		}
 		return false;
 	}
 
 	@Override
-	public ArrayList<Registration> getAllRegistrationData() throws RemoteException, NullDataException {
+	public ArrayList<Registration> getAllRegistrationData() throws NullDataException, SecurityException, IOException {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		return data.getAllRegistrationData();
 	}
 	
