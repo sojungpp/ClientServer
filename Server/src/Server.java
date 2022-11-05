@@ -54,14 +54,7 @@ public class Server extends UnicastRemoteObject implements ServerIF {
 		if(!data.addStudent(studentInfo, decipherToken(token))) return BaseStatus.FAIL_ADD_STUDENT;
 		return BaseStatus.SUCCESS;
 	}
-
-	@Override
-	public ArrayList<Course> getAllCourseData(String token) throws SecurityException, Exception {
-		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), decipherToken(token));
-		return data.getAllCourseData(decipherToken(token));
-	}
-
-
+	
 	@Override
 	public BaseStatus deleteStudent(String studentId, String token) throws SecurityException, Exception {
 		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), decipherToken(token));
@@ -69,9 +62,16 @@ public class Server extends UnicastRemoteObject implements ServerIF {
 		if(!data.deleteStudent(studentId, decipherToken(token))) return BaseStatus.FAIL_DELETE_STUDENT;
 		return BaseStatus.SUCCESS;
 	}
+
+	@Override
+	public ArrayList<Course> getAllCourseData(String token) throws SecurityException, Exception {
+		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), decipherToken(token));
+		return data.getAllCourseData(decipherToken(token));
+	}
 	
 	@Override
-	public BaseStatus addCourse(String courseInfo, String token) throws SecurityException, Exception {
+	public BaseStatus addCourse(String courseId, String courseInfo, String token) throws SecurityException, Exception {
+		if(data.findCourse(courseId, decipherToken(token))) return BaseStatus.ALREADY_COURSEID;
 		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), decipherToken(token));
 		if(!data.addCourse(courseInfo, decipherToken(token))) return BaseStatus.FAIL_ADD_COURSE;
 		else return BaseStatus.SUCCESS;
@@ -104,7 +104,7 @@ public class Server extends UnicastRemoteObject implements ServerIF {
 		if(!completedCourse.isEmpty() && completedCourse.contains(courseId)) return BaseStatus.ALREADY_COMPLETEDCOURSE;
 		if(!advancedCourse.isEmpty() && advancedCourse.contains(courseId) && completedCourse.isEmpty()) return BaseStatus.DO_NOT_TAKE_ADVANCEDCOURSE; 
 		if(!registerCourse.isEmpty() && !advancedCourse.isEmpty()) return BaseStatus.ALREADY_REGISTRATION; 
-		data.registerCourse(studentId, courseId);
+		if(!data.registerCourse(studentId, courseId)) return BaseStatus.FAIL_RIGISTER_COURSE;
 		return BaseStatus.SUCCESS;
 	}
 

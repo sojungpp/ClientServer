@@ -19,9 +19,11 @@ public enum BaseStatus {
 	ALREADY_COMPLETEDCOURSE(3002, "이미 수강한 과목입니다."),
 	FAIL_ADD_COURSE(3003, "과목 등록에 실패했습니다."),
 	FAIL_DELETE_COURSE(3004, "과목 삭제에 실패했습니다."),
+	ALREADY_COURSEID(3005, "이미 존재하는 과목입니다."),
 	
 	// 수강신청
-	ALREADY_REGISTRATION(4000, "이미 수강 신청한 과목입니다.");
+	ALREADY_REGISTRATION(4000, "이미 수강 신청한 과목입니다."),
+	FAIL_RIGISTER_COURSE(4001, "수강 신청에 실패했습니다.");
 
 	private final int codeNumber;
 	private final String message;

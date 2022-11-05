@@ -132,7 +132,7 @@ public class Client {
 		System.out.println("Course Name: "); String courseName = inputReader.readLine().trim();
 		System.out.println("Advanced Course List: "); String advancedCourses = inputReader.readLine().trim();
 		
-		BaseStatus baseStatus = server.addCourse(courseId + " " + professorName + " " + courseName + " " + advancedCourses, token);
+		BaseStatus baseStatus = server.addCourse(courseId, courseId + " " + professorName + " " + courseName + " " + advancedCourses, token);
 		new BaseException(baseStatus);
 	}
 

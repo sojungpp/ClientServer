@@ -10,7 +10,7 @@ public interface ServerIF extends Remote{
 	BaseStatus addStudent(String studentId, String studentInfo, String token) throws RemoteException, IOException, SecurityException, Exception;
 	BaseStatus deleteStudent(String studentId, String token) throws RemoteException, IOException, SecurityException, Exception;
 	BaseStatus deleteCourse(String courseId, String token) throws RemoteException, IOException, SecurityException, Exception;
-	BaseStatus addCourse(String courseInfo, String token) throws RemoteException, IOException, SecurityException, Exception;
+	BaseStatus addCourse(String courseId, String courseInfo, String token) throws RemoteException, IOException, SecurityException, Exception;
 	boolean findStudent(String studentId) throws RemoteException, SecurityException, IOException;
 	BaseStatus registerCourse(String token, String courseId) throws RemoteException, IOException, SecurityException, Exception;
 	BaseStatus login(String studentId, String studentPassword) throws RemoteException, IOException;

@@ -14,7 +14,7 @@ public interface DataIF extends Remote{
 	boolean findCourse(String courseId, String userId) throws RemoteException, SecurityException, IOException;
 	ArrayList<String> findCompletedCourse(String userId) throws RemoteException, SecurityException, IOException;
 	ArrayList<String> findAdvancedCourse(String courseId, String userId) throws RemoteException, SecurityException, IOException;
-	void registerCourse(String studentId, String courseID) throws RemoteException, IOException;
+	boolean registerCourse(String studentId, String courseID) throws RemoteException, IOException;
 	ArrayList<String> findRegisterCourse(String userId) throws RemoteException, SecurityException, IOException;
 	String findStudentPassword(String userId) throws RemoteException, SecurityException, IOException;
 	ArrayList<Registration> getAllRegistrationData(String string) throws RemoteException, NullDataException, SecurityException, IOException;
