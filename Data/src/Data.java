@@ -15,28 +15,22 @@ public class Data extends UnicastRemoteObject implements DataIF {
 	protected static StudentList studentList;
 	protected static CourseList courseList;
 	protected static RegisterList registrationList;
-	String name;
 	
 	protected Data() throws RemoteException {
 		super();
 	}
 
 	public static void main(String[] arg) throws FileNotFoundException, IOException {
-
 		try {
 			Data data = new Data(); 
 			Naming.rebind("Data", data); 
 			System.out.println("Data is ready !!!");
-			
 			studentList = new StudentList("C:\\Users\\박소정\\eclipse-workspace\\Data\\src\\Students.txt");
 			courseList = new CourseList("C:\\Users\\박소정\\eclipse-workspace\\Data\\src\\Courses.txt");
-			registrationList = new RegisterList("C:\\Users\\박소정\\eclipse-workspace\\Data\\src\\Registrations.txt");
-			
+			registrationList = new RegisterList("C:\\Users\\박소정\\eclipse-workspace\\Data\\src\\Registrations.txt");	
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace(); 
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 	}
@@ -130,8 +124,5 @@ public class Data extends UnicastRemoteObject implements DataIF {
 		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), userId);
 		return registrationList.getAllRegistrationRecords();
 	}
-
-
-
 	
 }

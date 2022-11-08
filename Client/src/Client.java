@@ -1,9 +1,6 @@
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.rmi.Naming;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
@@ -16,9 +13,7 @@ public class Client {
 		BufferedReader inputReader = new BufferedReader(new InputStreamReader(System.in));
 		try {
 			server = (ServerIF)Naming.lookup("Server");
-			while(true) {
-				login(server, inputReader);
-			}
+			while(true) login(server, inputReader);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		} catch (NullDataException e) {
@@ -29,12 +24,12 @@ public class Client {
 	private static void login(ServerIF server, BufferedReader inputReader) throws SecurityException, Exception {
 		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), null);
 		System.out.println("*********************** LOGIN (Exit: x) ***********************");
-		System.out.println("Student Id: "); String studentId = inputReader.readLine().trim();
-		if(studentId.equals("x")) System.exit(0);
-		System.out.println("Student Password: "); String studentPassword = inputReader.readLine().trim(); 
-		BaseStatus baseStatus = server.login(studentId, studentPassword);
+		System.out.println("Id: "); String userId = inputReader.readLine().trim();
+		if(userId.equals("x")) System.exit(0);
+		System.out.println("Password: "); String userPassword = inputReader.readLine().trim(); 
+		BaseStatus baseStatus = server.login(userId, userPassword);
 		if(baseStatus==BaseStatus.SUCCESS) {
-			String token = server.createToken(studentId);
+			String token = server.createToken(userId);
 			initialMenu(server, inputReader, token);
 		}
 		else new BaseException(baseStatus);
@@ -53,44 +48,26 @@ public class Client {
 		System.out.println("6. Delete Course");
 		System.out.println("7. registerCourse");
 		System.out.println("8. List Registration");
-		System.out.println("x. Exit");
+		System.out.println("x. Logout");
 	}
 	
 	private static void initialMenu(ServerIF server, BufferedReader inputReader, String token) throws SecurityException, Exception {
 		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), server.decipherToken(token));
 		while(true) {
-		showMenu(server, token);
-		String userConsoleInput = inputReader.readLine().trim();
-		switch(userConsoleInput) {
-			case "1" :
-				showData(server.getAllStudentData(token), server, token);
-				break;
-			case "2" :
-				addStudent(server, inputReader, token);
-				break;
-			case "3" :
-				deleteStudent(server, inputReader, token);
-				break;
-			case "4" :
-				showData(server.getAllCourseData(token), server, token);
-				break;
-			case "5" :
-				addCourse(server, inputReader, token);
-				break;
-			case "6" :
-				deleteCourse(server, inputReader, token);
-				break;
-			case "7" :
-				registerCourse(server, inputReader, token);
-				break;	
-			case "8" :
-				showData(server.getAllRegistrationData(token), server, token);
-				break;
-			case "x":
-				return;
-			default:
-				new BaseException(BaseStatus.NO_EXIST_MENU);
-		}
+			showMenu(server, token);
+			String userConsoleInput = inputReader.readLine().trim();
+			switch(userConsoleInput) {
+				case "1" : showData(server.getAllStudentData(token), server, token); break;
+				case "2" : addStudent(server, inputReader, token); break;
+				case "3" : deleteStudent(server, inputReader, token); break;
+				case "4" : showData(server.getAllCourseData(token), server, token); break;
+				case "5" : addCourse(server, inputReader, token); break;
+				case "6" : deleteCourse(server, inputReader, token); break;
+				case "7" : registerCourse(server, inputReader, token); break;	
+				case "8" : showData(server.getAllRegistrationData(token), server, token); break;
+				case "x": return;
+				default: new BaseException(BaseStatus.NO_EXIST_MENU);
+			}
 		}
 	}
 	

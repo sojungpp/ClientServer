@@ -14,7 +14,7 @@ public interface ServerIF extends Remote{
 	boolean findStudent(String studentId) throws RemoteException, SecurityException, IOException;
 	BaseStatus registerCourse(String token, String courseId) throws RemoteException, IOException, SecurityException, Exception;
 	BaseStatus login(String studentId, String studentPassword) throws RemoteException, IOException;
-	ArrayList<Registration> getAllRegistrationData(String token) throws RemoteException, NullDataException, SecurityException, IOException, Exception;
+	ArrayList<String> getAllRegistrationData(String token) throws RemoteException, NullDataException, SecurityException, IOException, Exception;
 	String createToken(String studentId) throws SecurityException, IOException, Exception;
 	String decipherToken(String studentId) throws SecurityException, IOException, Exception;
 }

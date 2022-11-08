@@ -16,6 +16,7 @@ public class Registration implements Serializable{
     		this.registerCoursesList.add(stringTokenizer.nextToken());
     	}
     }
+    
     public boolean match(String studentId) {
         return this.studentId.equals(studentId);
     }

@@ -18,12 +18,10 @@ public class Server extends UnicastRemoteObject implements ServerIF {
 	}
 
 	public static void main(String[] arg) throws NotBoundException {
-
 		try {
 			Server server = new Server(); 
 			Naming.rebind("Server", server); 
 			System.out.println("RMI Server is ready !!!");
-			
 			data = (DataIF) Naming.lookup("Data");
 		} catch (RemoteException e) {
 			e.printStackTrace();
@@ -33,11 +31,11 @@ public class Server extends UnicastRemoteObject implements ServerIF {
 	}
 	
 	@Override
-	public BaseStatus login(String userId, String studentPassword) throws SecurityException, IOException {
+	public BaseStatus login(String studentId, String studentPassword) throws SecurityException, IOException {
 		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), null);
-		if(!data.findStudent(userId, null)) return BaseStatus.INVALID_STUDENTID;
-		String password = data.findStudentPassword(userId);
-		if(!password.equals(studentPassword)) return BaseStatus.SUCCESS;
+		if(!data.findStudent(studentId, null)) return BaseStatus.INVALID_STUDENTID;
+		String password = data.findStudentPassword(studentId);
+		if(password.equals(studentPassword)) return BaseStatus.SUCCESS;
 		else return BaseStatus.FAIL_LOGIN;
 	}
 
@@ -102,17 +100,18 @@ public class Server extends UnicastRemoteObject implements ServerIF {
 		ArrayList<String> completedCourse = data.findCompletedCourse(decipherToken(token));
 		ArrayList<String> advancedCourse = data.findAdvancedCourse(courseId, decipherToken(token));
 		if(!completedCourse.isEmpty() && completedCourse.contains(courseId)) return BaseStatus.ALREADY_COMPLETEDCOURSE;
-		if(!advancedCourse.isEmpty() && advancedCourse.contains(courseId) && completedCourse.isEmpty()) return BaseStatus.DO_NOT_TAKE_ADVANCEDCOURSE; 
-		if(!registerCourse.isEmpty() && !advancedCourse.isEmpty()) return BaseStatus.ALREADY_REGISTRATION; 
+		for(int i=0; i<advancedCourse.size(); i++) {
+			if(completedCourse.isEmpty() || !completedCourse.contains(advancedCourse.get(i))) return BaseStatus.DO_NOT_TAKE_ADVANCEDCOURSE; 
+		}
+		if(!registerCourse.isEmpty() && registerCourse.contains(courseId)) return BaseStatus.ALREADY_REGISTRATION; 
 		if(!data.registerCourse(studentId, courseId)) return BaseStatus.FAIL_RIGISTER_COURSE;
 		return BaseStatus.SUCCESS;
 	}
 
-
 	@Override
-	public ArrayList<Registration> getAllRegistrationData(String token) throws Exception {
+	public ArrayList<String> getAllRegistrationData(String token) throws Exception {
 		logger.log(new Object() {}.getClass().getEnclosingMethod().getName(), decipherToken(token));
-		return data.getAllRegistrationData(decipherToken(token));
+		return data.findRegisterCourse(decipherToken(token));
 	}
 
 	@Override

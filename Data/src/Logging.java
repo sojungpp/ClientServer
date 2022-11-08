@@ -9,48 +9,30 @@ import java.util.logging.SimpleFormatter;
 
 public class Logging {
 	
-    private final static Logger LOG = Logger.getGlobal();
-    private static String methodName;
+    private static String commandType;
     private static String id;
-    
-    Logger logger = Logger.getLogger("mylogger");
+    Logger logger = Logger.getLogger("logger");
 	private static Logging instance = new Logging();
     
-    public static void main(String[] args) throws SecurityException, IOException {
-    }  
-    
-    public static Logging getLogger() {
-		return instance;
-	}
-    
-    public void log(String msg, String userId) throws SecurityException, IOException {
-    	
-    	 // remove default log handler
+    public void log(String methodName, String userId) throws SecurityException, IOException {
         logger.setUseParentHandlers(false);
-        methodName = msg;
+        commandType = methodName;
         id = userId;
-        
-
-        // add new log handler
         Handler handler = new FileHandler("data.log", true);
         handler.setFormatter(new SimpleFormatter() {
             private static final String format = "[%1$tF %1$tT] %2$-20s | %3$s %n";
             
             @Override
-            public synchronized String format(LogRecord lr) {
-            	lr.setSourceMethodName(methodName);
-
-                return String.format(format,
-                        new Date(lr.getMillis()),
-                        lr.getSourceMethodName(),
-                        id
-                );
+            public synchronized String format(LogRecord logRecord) {
+            	logRecord.setSourceMethodName(commandType);
+                return String.format(format, new Date(logRecord.getMillis()), logRecord.getSourceMethodName(), id);
             }
         });
         logger.addHandler(handler);
-
-        // logging
         logger.info("");
 	}
     
+    public static Logging getLogger() {
+		return instance;
+	}
 }
